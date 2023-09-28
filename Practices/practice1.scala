@@ -16,6 +16,10 @@ if (num %2 == 0){
 
 //3. Dada la variable bird = "tweet", utiliza interpolacion de string para
 //   imprimir "Estoy ecribiendo un tweet"
+
+var bird = "tweet"
+println(s"Estoy escribiendo un $bird")
+
 //4. Dada la variable mensaje = "Hola Luke yo soy tu padre!" utiliza slilce para extraer la
 //   secuencia "Luke"
 //5. Cual es la diferencia entre value y una variable en scala?
