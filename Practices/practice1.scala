@@ -28,6 +28,8 @@ mensaje= mensaje slice (5,9)
 println(s"Hola $mensaje")
 
 //5. Cual es la diferencia entre value y una variable en scala?
+
+println("Una variable es mutable con el tiempo un valor no es mutable y tiene un valor permanente")
 //6. Dada la tupla (2,4,5,1,2,3,3.1416,23) regresa el numero 3.1416 
 
 
