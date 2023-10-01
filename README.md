@@ -113,3 +113,22 @@ val Lista: List[Int] = List(1, 3, 3, 4, 6, 7, 3, 7)
 val unicosLista: List[Int] = List(1, 3, 4, 6, 7)
 val res47: scala.collection.immutable.Set[Int] = HashSet(1, 6, 7, 3, 4)
 ```
+
+### Crea una mapa mutable llamado nombres que contenga los siguiente "Jose", 20, "Luis", 24, "Ana", 23, "Susana", "27"
+
+```scala
+val nombres = Map(("Jose", 20),("Luis", 24), ("Ana", 23),("Susana", "27"))
+```
+```sh
+nombres: scala.collection.immutable.Map[String,Any] = Map(Jose -> 20, Luis -> 24, Ana -> 23, Susana -> 27)
+```
+#### Imprime todas la llaves del mapa
+
+```scala
+nombres.keys
+println (s"Todas llaves $nombres.keys")
+```
+```sh
+Todas llaves Map(Jose -> 20, Luis -> 24, Ana -> 23, Susana -> 27).keys
+res11: Iterable[String] = Set(Jose, Luis, Ana, Susana)
+```
