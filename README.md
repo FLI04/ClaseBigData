@@ -126,9 +126,18 @@ nombres: scala.collection.immutable.Map[String,Any] = Map(Jose -> 20, Luis -> 24
 
 ```scala
 nombres.keys
-println (s"Todas llaves $nombres.keys")
+println ("Todas llaves"+ nombres.keys)
 ```
 ```sh
-Todas llaves Map(Jose -> 20, Luis -> 24, Ana -> 23, Susana -> 27).keys
-res11: Iterable[String] = Set(Jose, Luis, Ana, Susana)
+val res90: Iterable[String] = Set(Jose, Luis, Ana, Susana)
+Todas llavesSet(Jose, Luis, Ana, Susana)
+```
+#### Agrega el siguiente valor al mapa("Miguel", 23)
+
+```scala
+nombres += ("Miguel" -> 23)
+println ("Todas llaves"+ nombres.keys)
+```
+```sh
+Todas llavesSet(Ana, Miguel, Luis, Jose, Susana)
 ```

@@ -20,9 +20,13 @@ val unicosLista = Lista.distinct
 Lista.toSet
 
 //6. Crea una mapa mutable llamado nombres que contenga los siguiente "Jose", 20, "Luis", 24, "Ana", 23, "Susana", "27"
-val nombres = Map(("Jose", 20),("Luis", 24), ("Ana", 23),("Susana", "27"))
-//6 a . Imprime todas la llaves del mapa
-nombres.keys
-println (s"Todas llaves $nombres.keys")
-//6 b . Agrega el siguiente valor al mapa("Miguel", 23)
+var nombres = Map(("Jose", 20),("Luis", 24), ("Ana", 23),("Susana", "27"))
+
+    //6 a . Imprime todas la llaves del mapa
+    nombres.keys
+    println ("Todas llaves"+ nombres.keys)
+
+    //6 b . Agrega el siguiente valor al mapa("Miguel", 23)
+    nombres += ("Miguel" -> 23)
+    println ("Todas llaves"+ nombres.keys)
 
