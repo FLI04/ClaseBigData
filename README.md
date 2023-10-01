@@ -52,3 +52,17 @@ println("Una variable es mutable con el tiempo un valor no es mutable y tiene un
 ```sh
 Una variable es mutable con el tiempo un valor no es mutable y tiene un valor permanente
 ```
+
+### Dada la tupla (2,4,5,1,2,3,3.1416,23) regresa el numero 3.1416 
+
+```scala
+var myTup = (2,4,5,1,2,3,3.1416,23)
+val pi = myTup._7
+
+println(s"Pi = $pi")
+```
+```sh
+myTup: (Int, Int, Int, Int, Int, Int, Double, Int) = (2,4,5,1,2,3,3.1416,23)
+pi: Double = 3.1416
+Pi = 3.1416
+```
