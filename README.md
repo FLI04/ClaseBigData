@@ -31,3 +31,16 @@ println(s"Estoy escribiendo un $bird")
 var bird: String = tweet
 Estoy escribiendo un tweet
 ```
+
+### Dada la variable mensaje = "Hola Luke yo soy tu padre!" utiliza slice para extraer la secuencia "Luke"
+
+```scala
+var mensaje = "Hola Luke soy tu padre!"
+mensaje= mensaje slice (5,9)
+println(s"Hola $mensaje")
+```
+```sh
+mensaje: String = Hola Luke soy tu padre!
+mensaje: String = Luke
+Hola Luke
+```
