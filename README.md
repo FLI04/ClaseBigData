@@ -44,3 +44,11 @@ mensaje: String = Hola Luke soy tu padre!
 mensaje: String = Luke
 Hola Luke
 ```
+### Cual es la diferencia entre value y una variable en scala?
+
+```scala
+println("Una variable es mutable con el tiempo un valor no es mutable y tiene un valor permanente")
+```
+```sh
+Una variable es mutable con el tiempo un valor no es mutable y tiene un valor permanente
+```
