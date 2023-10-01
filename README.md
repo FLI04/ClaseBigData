@@ -21,3 +21,13 @@ if (num %2 == 0){
 num: Int = 13
 El numero no es par:  13
 ```
+### Dada la variable bird = "tweet", utiliza interpolacion de string para imprimir "Estoy ecribiendo un tweet"
+
+```scala
+var bird = "tweet"
+println(s"Estoy escribiendo un $bird")
+```
+```sh
+var bird: String = tweet
+Estoy escribiendo un tweet
+```
