@@ -26,3 +26,14 @@ while(y < 10){
 
 }
 println(s"Valor final de Y $y")
+
+// Functions 
+
+//Define la funcion "simple" sin argumentos y sin devolver valores "Unit"
+def simple(): Unit = {
+    //imprime la etiqueta "simple print"
+    println("simple print")
+}
+
+//se llama la funcion simple()
+simple()

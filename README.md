@@ -175,3 +175,49 @@ x is still less then 5, adding 1 to x
 x is currently 4
 x is still less then 5, adding 1 to x
 ```
+### Estructura de Ciclo While con variable Y
+
+```scala
+//Declara variable y =0
+var y = 0
+
+//condición while, se define un ciclo que mientras y sea menor a 10 se imprimen dos mensajes y se pone condicion de salida cuando y sea igual a 3
+while(y < 10){
+    println(s"y is currently $y")
+    println(s"y is still less then 10, add 1 to y")
+    y = y+1
+    if(y==3) break 
+
+}
+println(s"Valor final de Y $y")
+```
+```sh
+y: Int = 0
+y is currently 0
+y is still less then 10, add 1 to y
+y is currently 1
+y is still less then 10, add 1 to y
+y is currently 2
+y is still less then 10, add 1 to y
+scala.util.control.BreakControl
+Valor final de Y 3
+```
+### Funcion Simple sin valor de retorno
+
+```scala
+// Functions 
+
+//Define la funcion "simple" sin argumentos y sin devolver valores "Unit"
+def simple(): Unit = {
+    //imprime la etiqueta "simple print"
+    println("simple print")
+}
+
+//se llama la funcion simple()
+simple()
+```
+```sh
+def simple(): Unit
+simple print
+```
+

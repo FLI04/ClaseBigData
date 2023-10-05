@@ -30,3 +30,5 @@ var nombres = Map(("Jose", 20),("Luis", 24), ("Ana", 23),("Susana", "27"))
     nombres += ("Miguel" -> 23)
     println ("Todas llaves"+ nombres.keys)
 
+
+
