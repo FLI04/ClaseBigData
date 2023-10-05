@@ -47,3 +47,13 @@ def adder(num1:Int, num2:Int): Int = {
 //se llama la funcion "adder" con 2 valores enteros (5,5)
 adder(5, 5)
 
+//Define la funcion "greetName" con un parametro String, y regresa un valor String
+def greetName(name:String): String={
+    //concatena la palabra "Hello"a el parametro recibido
+    return s"Hello $name"
+}
+
+//declara "fullgreeat" y le asigna el valor devuelto por la funcion "greetName".
+val fullgreet = greetName("Mundo Cruel")
+println(fullgreet)
+

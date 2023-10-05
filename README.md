@@ -237,4 +237,22 @@ adder(5, 5)
 adder: (num1: Int, num2: Int)Int
 res7: Int = 10
 ```
+### Funcion que devuela la concatenacion de "Hello" con el parametro recibido.
+
+```scala
+//Define la funcion "greetName" con un parametro String, y regresa un valor String
+def greetName(name:String): String={
+    //concatena la palabra "Hello"a el parametro recibido
+    return s"Hello $name"
+}
+
+//declara "fullgreeat" y le asigna el valor devuelto por la funcion "greetName".
+val fullgreet = greetName("Mundo Cruel")
+println(fullgreet)
+```
+```sh
+def greetName(name: String): String
+val fullgreet: String = Hello Mundo Cruel
+Hello Mundo Cruel
+```
 
