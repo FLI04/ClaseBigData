@@ -221,3 +221,20 @@ def simple(): Unit
 simple print
 ```
 
+### Funcion Suma con retorno de valor entero
+
+```scala
+//Define Funcion "adder" con 2 enteros como argumentos y retorna 1 entero como valor
+def adder(num1:Int, num2:Int): Int = {
+
+//regresa el resultado de la suma 
+    return num1 + num2
+}
+//se llama la funcion "adder" con 2 valores enteros (5,5)
+adder(5, 5)
+```
+```sh
+adder: (num1: Int, num2: Int)Int
+res7: Int = 10
+```
+
