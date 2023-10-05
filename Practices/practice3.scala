@@ -57,3 +57,17 @@ def greetName(name:String): String={
 val fullgreet = greetName("Mundo Cruel")
 println(fullgreet)
 
+//Define Funcion "isPrime" con 1 entero como argumento y retorna booleano como resultado de la condicion si el argumento es numero primo o no
+def isPrime(num:Int): Boolean = {
+    //Ciclo for para condicion de numero primo
+    for(n <- Range(2, num)){
+        if(num%n == 0){
+            return false
+        }
+    }
+    return true
+}
+//Imprime true o false para numero primo
+println(isPrime(10))
+println(isPrime(23))
+

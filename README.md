@@ -256,3 +256,25 @@ val fullgreet: String = Hello Mundo Cruel
 Hello Mundo Cruel
 ```
 
+### Funcion que evalua con true o false si un numero es primo
+```scala
+//Define Funcion "isPrime" con 1 entero como argumento y retorna booleano como resultado de la condicion si el argumento es numero primo o no
+def isPrime(num:Int): Boolean = {
+    //Ciclo for para condicion de numero primo
+    for(n <- Range(2, num)){
+        if(num%n == 0){
+            return false
+        }
+    }
+    return true
+}
+//Imprime true o false para numero primo
+println(isPrime(10))
+println(isPrime(23))
+```
+```sh
+isPrime: (num: Int)Boolean
+false
+true
+```
+
