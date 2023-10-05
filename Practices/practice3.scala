@@ -71,3 +71,11 @@ def isPrime(num:Int): Boolean = {
 println(isPrime(10))
 println(isPrime(23))
 
+//Se declara una lista con 4 elementos
+val numbers = List(1,2,3,7)
+//Se declara la fucnion "check" la cual recibe una lista de enteros y regresa una lista de enteros.
+def check(nums:List[Int]): List[Int]={
+    return nums
+}
+//imprimimos la lista que regresa la funcion "check"
+println(check(numbers))

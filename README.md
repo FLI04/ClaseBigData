@@ -277,4 +277,19 @@ isPrime: (num: Int)Boolean
 false
 true
 ```
+### Funcion que recibe una lista de enteros y regresa una lista de enteros.
+```scala
+val numbers = List(1,2,3,7)
+
+def check(nums:List[Int]): List[Int]={
+    return nums
+}
+
+println(check(numbers))
+```
+```sh
+val numbers: List[Int] = List(1, 2, 3, 7)
+def check(nums: List[Int]): List[Int]
+List(1, 2, 3, 7)
+```
 
