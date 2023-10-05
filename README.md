@@ -141,3 +141,37 @@ println ("Todas llaves"+ nombres.keys)
 ```sh
 Todas llavesSet(Ana, Miguel, Luis, Jose, Susana)
 ```
+# Unit1 Practice 3 - Analice y describa el código en la sesión 6.
+### Estructura de Ciclo While.
+
+```scala
+// importamos la funcion Break.
+import util.control.Breaks._
+
+//se declara una variable de tipo int
+var x = 0
+
+//condición while, se define un ciclo que mientras x sea menor a cinco se imprimen dos mensajes:
+while(x < 5){
+    //se imprime el valor actual de x
+    println(s"x is currently $x")
+    //se imprime la siguiente etiqueta.
+    println(s"x is still less then 5, adding 1 to x ")
+    //se aumenta en un el valor de la variable "x".
+    x = x + 1
+})
+```
+```sh
+import util.control.Breaks._
+var x: Int = 0
+x is currently 0
+x is still less then 5, adding 1 to x
+x is currently 1
+x is still less then 5, adding 1 to x
+x is currently 2
+x is still less then 5, adding 1 to x
+x is currently 3
+x is still less then 5, adding 1 to x
+x is currently 4
+x is still less then 5, adding 1 to x
+```
