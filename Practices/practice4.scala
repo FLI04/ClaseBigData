@@ -58,3 +58,24 @@ def fib(n:Int): Int =
  println("El numero Fibonacci de " + n + " es: " + fib(n))
 
 //Algoritmo 5
+var n = 23
+var k = 2
+def fib(n:Int): Int =
+ {
+  if (n<2)
+    return n
+  else
+  {
+    val vector = Array.range(0,n+2)
+    while (k<(n+1))
+    {
+      vector.update(k,(vector(k-1)+vector(k-2)))
+      k+=1
+    }
+    return(vector(n))
+    
+  }
+   
+ }
+ 
+ println("El numero Fibonacci de " + n + " es: " + fib(n))

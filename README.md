@@ -371,3 +371,34 @@ var n: Int = 10
 def fib(n: Int): Int
 El numero Fibonacci de 10 es: 55
 ```
+
+## Algoritmo 4
+```scala
+var n = 23
+var k = 2
+def fib(n:Int): Int =
+ {
+  if (n<2)
+    return n
+  else
+  {
+    val vector = Array.range(0,n+2)
+    while (k<(n+1))
+    {
+      vector.update(k,(vector(k-1)+vector(k-2)))
+      k+=1
+    }
+    return(vector(n))
+    
+  }
+   
+ }
+ 
+ println("El numero Fibonacci de " + n + " es: " + fib(n))
+ ```
+```sh
+n: Int = 23
+k: Int = 2
+fib: (n: Int)Int
+El numero Fibonacci de 23 es: 28657
+```
