@@ -345,3 +345,29 @@ n: Int = 7
 fib: (n: Int)Int
 El numero Fibonacci de 7 es: 13
 ```
+## Algoritmo 4
+```scala
+var n = 10
+
+def fib(n:Int): Int =
+ {
+   var a = 0
+   var b = 1
+   var k = 0
+   while (k < n)
+   {
+      b+=a
+      a=b-a 
+      k +=1
+   }
+   return a
+    
+ }
+ 
+ println("El numero Fibonacci de " + n + " es: " + fib(n))
+ ```
+```sh
+var n: Int = 10
+def fib(n: Int): Int
+El numero Fibonacci de 10 es: 55
+```

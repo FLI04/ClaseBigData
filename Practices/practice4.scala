@@ -38,4 +38,23 @@ def fib(n:Int): Int =
  println("El numero Fibonacci de " + n + " es: " + fib(n))
 //Algoritmo 4,
 
+var n = 10
+
+def fib(n:Int): Int =
+ {
+   var a = 0
+   var b = 1
+   var k = 0
+   while (k < n)
+   {
+      b+=a
+      a=b-a 
+      k +=1
+   }
+   return a
+    
+ }
+ 
+ println("El numero Fibonacci de " + n + " es: " + fib(n))
+
 //Algoritmo 5
