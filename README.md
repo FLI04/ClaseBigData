@@ -391,7 +391,6 @@ def fib(n:Int): Int =
     return(vector(n))
     
   }
-   
  }
  
  println("El numero Fibonacci de " + n + " es: " + fib(n))
