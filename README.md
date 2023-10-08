@@ -292,4 +292,26 @@ val numbers: List[Int] = List(1, 2, 3, 7)
 def check(nums: List[Int]): List[Int]
 List(1, 2, 3, 7)
 ```
+# Práctica 4 - Implementar Seudocódigo de la serie Fibonacci - Implemente los siguientes seudocódigos de la serie Fibonacci en Scala.
 
+
+### Algoritmo 1.
+
+```scala
+var n = 15
+
+def fib(n:Int): Int =
+ {
+   if (n<2)
+    return n 
+   else 
+    return fib(n-1)+fib(n-2)
+    
+ }
+println("El numero Fibonacci de " + n + " es: " + fib(n))
+```
+```sh
+var n: Int = 15
+def fib(n: Int): Int
+El numero Fibonacci de 15 es: 610
+```
