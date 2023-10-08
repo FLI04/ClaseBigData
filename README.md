@@ -372,7 +372,7 @@ def fib(n: Int): Int
 El numero Fibonacci de 10 es: 55
 ```
 
-## Algoritmo 4
+## Algoritmo 5
 ```scala
 var n = 23
 var k = 2
