@@ -403,7 +403,7 @@ El numero Fibonacci de 23 es: 28657
 ```
 # Evaluation Unit 1
 
-## Comienza una simple sesión Spark.
+## 1.- Comienza una simple sesión Spark.
 ```scala
 import org.apache.spark.sql.SparkSession
 val spark = SparkSession.builder().getOrCreate()
@@ -413,6 +413,13 @@ val args: Array[String] = Array()
 Loading Practices\evaluationPractice1.scala...
 import org.apache.spark.sql.SparkSession
 val spark: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@6b1293a5
+```
+## 2.- Cargue el archivo Netflix Stock CSV en dataframe llamado df, haga que Spark infiera los tipos de datos.
+```scala
+val df = spark.read.option("header", "true").option("inferSchema","true")csv("Practices/Netflix_2011_2016.csv")
+ ```
+```sh
+val df: org.apache.spark.sql.DataFrame = [Date: date, Open: double ... 5 more fields]
 ```
 
 
