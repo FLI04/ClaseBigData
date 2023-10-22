@@ -525,5 +525,18 @@ val HVRatio = df.withColumn("HV Ratio", $"Volume" / $"High")
 ```sh
 Es el ultimo precio de la accion registrado en la jornada.
 ```
+ ## 10. ¿Cuál es el máximo y mínimo de la columna “Volumen”?
+```scala
+df.select(max("Volume"),min("Volume")).show()
+
+```
+```sh
++-----------+-----------+
+|max(Volume)|min(Volume)|
++-----------+-----------+
+|  315541800|    3531300|
++-----------+-----------+
+
+```
 
 

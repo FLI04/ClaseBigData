@@ -27,3 +27,7 @@ HVRatio.show()
 // 8. ¿Qué día tuvo el pico más alto en la columna “Open”?
 
 df.select(max("OPEN")).show()
+
+// 10. ¿Cuál es el máximo y mínimo de la columna “Volumen”?
+
+df.select(max("Volume"),min("Volume")).show()
