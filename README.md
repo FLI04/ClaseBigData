@@ -540,15 +540,25 @@ df.select(corr($"High", $"Volume")).show()
 
 ```
  ## 11. ¿Cuál es el máximo y mínimo de la columna “Volumen”?
-```scala
 
-//   a) ¿Cuántos días fue la columna “Close” inferior a $ 600?
+ ### a. ¿Cuántos días fue la columna “Close” inferior a $ 600?
+```scala   
         df.filter($"Close"<600).count()
 
 ```
 ```sh
 
 val res24: Long = 1218
+
+```
+ ### b. ¿Qué porcentaje del tiempo fue la columna “High” mayor que $ 500?
+```scala   
+        (df.filter($"High">500).count()*1.0/df.count())*100
+
+```
+```sh
+
+val res36: Double = 4.924543288324067
 
 ```
 

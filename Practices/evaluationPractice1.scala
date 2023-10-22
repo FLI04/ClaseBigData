@@ -35,4 +35,5 @@ df.select(max("Volume"),min("Volume")).show()
 // 11. Con Sintaxis Scala/Spark $ conteste lo siguiente:
 //   a) ¿Cuántos días fue la columna “Close” inferior a $ 600?
         df.filter($"Close"<600).count()
-
+//   b) ¿Qué porcentaje del tiempo fue la columna “High” mayor que $ 500?
+        (df.filter($"High">500).count()*1.0/df.count())*100
