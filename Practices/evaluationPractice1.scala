@@ -11,3 +11,6 @@ df.printSchema()
 
 //4. ¿Cómo es el esquema?
 df.printSchema()
+
+// 5. Imprime las primeras 5 renglones.
+df.head(5)
