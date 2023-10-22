@@ -436,3 +436,19 @@ root
  |-- Volume: integer (nullable = true)
  |-- Adj Close: double (nullable = true)
  ```
+
+ ## 4. ¿Cómo es el esquema?
+```scala
+df.printSchema()
+ ```
+```sh
+root
+ |-- Date: date (nullable = true)
+ |-- Open: double (nullable = true)
+ |-- High: double (nullable = true)
+ |-- Low: double (nullable = true)
+ |-- Close: double (nullable = true)
+ |-- Volume: integer (nullable = true)
+ |-- Adj Close: double (nullable = true)
+ ```
+

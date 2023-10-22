@@ -8,3 +8,6 @@ val df = spark.read.option("header", "true").option("inferSchema","true")csv("Pr
 
 // 3. ¿Cuáles son los nombres de las columnas?
 df.printSchema()
+
+//4. ¿Cómo es el esquema?
+df.printSchema()
