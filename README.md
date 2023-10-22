@@ -576,4 +576,26 @@ scala> df.select(corr($"High", $"Volume")).show()
 
 ```
 
+ ### d. ¿Cuál es el máximo de la columna “High” por año?
+```scala   
+        val df2 = df.withColumn("Year", year(df("Date")))
+        df2.groupBy("Year").max("High").show() 
+```
+```sh
+scala>  val df2 = df.withColumn("Year", year(df("Date")))
+df2: org.apache.spark.sql.DataFrame = [Date: date, Open: double ... 6 more fields]
+
+scala>  df2.groupBy("Year").max("High").show()
++----+------------------+
+|Year|         max(High)|
++----+------------------+
+|2015|        716.159996|
+|2013|        389.159988|
+|2014|        489.290024|
+|2012|        133.429996|
+|2016|129.28999299999998|
+|2011|120.28000300000001|
++----+------------------+
+```
+
 

@@ -40,3 +40,7 @@ df.select(max("Volume"),min("Volume")).show()
 
 //   c) ¿Cuál es la correlación de Pearson entre columna “High” y la columna “Volumen”?
         df.select(corr($"High", $"Volume")).show()
+
+//   d) ¿Cuál es el máximo de la columna “High” por año?
+        val df2 = df.withColumn("Year", year(df("Date")))
+        df2.groupBy("Year").max("High").show()      
