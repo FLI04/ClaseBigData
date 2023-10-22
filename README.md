@@ -527,15 +527,28 @@ Es el ultimo precio de la accion registrado en la jornada.
 ```
  ## 10. ¿Cuál es el máximo y mínimo de la columna “Volumen”?
 ```scala
-df.select(max("Volume"),min("Volume")).show()
+
+df.select(corr($"High", $"Volume")).show()
 
 ```
 ```sh
-+-----------+-----------+
-|max(Volume)|min(Volume)|
-+-----------+-----------+
-|  315541800|    3531300|
-+-----------+-----------+
++--------------------+
+|  corr(High, Volume)|
++--------------------+
+|-0.20960233287942157|
++--------------------+
+
+```
+ ## 11. ¿Cuál es el máximo y mínimo de la columna “Volumen”?
+```scala
+
+//   a) ¿Cuántos días fue la columna “Close” inferior a $ 600?
+        df.filter($"Close"<600).count()
+
+```
+```sh
+
+val res24: Long = 1218
 
 ```
 

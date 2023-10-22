@@ -31,3 +31,8 @@ df.select(max("OPEN")).show()
 // 10. ¿Cuál es el máximo y mínimo de la columna “Volumen”?
 
 df.select(max("Volume"),min("Volume")).show()
+
+// 11. Con Sintaxis Scala/Spark $ conteste lo siguiente:
+//   a) ¿Cuántos días fue la columna “Close” inferior a $ 600?
+        df.filter($"Close"<600).count()
+
