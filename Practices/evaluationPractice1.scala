@@ -44,3 +44,7 @@ df.select(max("Volume"),min("Volume")).show()
 //   d) ¿Cuál es el máximo de la columna “High” por año?
         val df2 = df.withColumn("Year", year(df("Date")))
         df2.groupBy("Year").max("High").show()      
+
+//   e) ¿Cuál es el promedio de la columna “Close” para cada mes del calendario?
+        val df3 = df2.withColumn("Month", month(df("Date")))
+        df3.groupBy("Month").avg("Close").show()

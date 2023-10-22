@@ -598,4 +598,32 @@ scala>  df2.groupBy("Year").max("High").show()
 +----+------------------+
 ```
 
+ ### e. ¿Cuál es el promedio de la columna “Close” para cada mes del calendario?
+```scala   
+        val df3 = df2.withColumn("Month", month(df("Date")))
+        df3.groupBy("Month").avg("Close").show()
+```
+```sh
+scala> val df3 = df2.withColumn("Month", month(df("Date")))
+df3: org.apache.spark.sql.DataFrame = [Date: date, Open: double ... 7 more fields]
+
+scala>     df3.groupBy("Month").avg("Close").show()
++-----+------------------+
+|Month|        avg(Close)|
++-----+------------------+
+|   12| 199.3700942358491|
+|    1|212.22613874257422|
+|    6| 295.1597153490566|
+|    3| 249.5825228971963|
+|    5|264.37037614150944|
+|    9|206.09598121568627|
+|    4|246.97514271428562|
+|    8|195.25599892727263|
+|    7|243.64747528037387|
+|   10|205.93297300900903|
+|   11| 194.3172275445545|
+|    2| 254.1954634020619|
++-----+------------------+
+```
+
 
