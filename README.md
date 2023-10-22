@@ -519,3 +519,11 @@ val HVRatio = df.withColumn("HV Ratio", $"Volume" / $"High")
 |708.900017|
 +----------+
 ```
+
+ ## 9. ¿Cuál es el significado de la columna Cerrar “Close” en el contexto de información financiera, explíquelo no hay que codificar nada?
+
+```sh
+Es el ultimo precio de la accion registrado en la jornada.
+```
+
+
