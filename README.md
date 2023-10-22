@@ -422,4 +422,17 @@ val df = spark.read.option("header", "true").option("inferSchema","true")csv("Pr
 val df: org.apache.spark.sql.DataFrame = [Date: date, Open: double ... 5 more fields]
 ```
 
-
+## 3. ¿Cuáles son los nombres de las columnas?
+```scala
+df.printSchema()
+ ```
+```sh
+root
+ |-- Date: date (nullable = true)
+ |-- Open: double (nullable = true)
+ |-- High: double (nullable = true)
+ |-- Low: double (nullable = true)
+ |-- Close: double (nullable = true)
+ |-- Volume: integer (nullable = true)
+ |-- Adj Close: double (nullable = true)
+ ```
