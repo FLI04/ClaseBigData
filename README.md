@@ -562,4 +562,18 @@ val res36: Double = 4.924543288324067
 
 ```
 
+ ### c. ¿Cuál es la correlación de Pearson entre columna “High” y la columna “Volumen”?
+```scala   
+        df.select(corr($"High", $"Volume")).show()
+```
+```sh
+scala> df.select(corr($"High", $"Volume")).show()
++--------------------+
+|  corr(High, Volume)|
++--------------------+
+|-0.20960233287942157|
++--------------------+
+
+```
+
 
