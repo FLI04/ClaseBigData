@@ -474,7 +474,8 @@ df.describe().show()
 |    max|        708.900017|        716.159996|        697.569984|        707.610001|           315541800|        130.929993|
 +-------+------------------+------------------+------------------+------------------+--------------------+------------------+
  ```
- ## 7. Usa el método describe () para aprender sobre el DataFrame.
+ ## 7. Crea un nuevo Dataframe a partir del df creado anteriormente llamdo “HVRatio” para crear una columna nueva llamada “HV Ratio” que es la relación que existe
+//  entre el precio de la columna “High” frente a la columna “Volumen” de acciones negociadas por un día. Hint - es una operación
 ```scala
 val HVRatio = df.withColumn("HV Ratio", $"Volume" / $"High")
 HVRatio.show()
@@ -508,16 +509,11 @@ val HVRatio: org.apache.spark.sql.DataFrame = [Date: date, Open: double ... 6 mo
 ```
  ## 8. ¿Qué día tuvo el pico más alto en la columna “Open”?
 ```scala
-
-val HVRatio = df.withColumn("HV Ratio", $"Volume" / $"High")
+val maxOpenRow = df.sort(desc("OPEN")).select("Date", "OPEN").head()
 
 ```
 ```sh
-+----------+
-| max(OPEN)|
-+----------+
-|708.900017|
-+----------+
+val maxOpenRow: org.apache.spark.sql.Row = [2015-07-14,708.900017]
 ```
 
  ## 9. ¿Cuál es el significado de la columna Cerrar “Close” en el contexto de información financiera, explíquelo no hay que codificar nada?
@@ -528,15 +524,15 @@ Es el ultimo precio de la accion registrado en la jornada.
  ## 10. ¿Cuál es el máximo y mínimo de la columna “Volumen”?
 ```scala
 
-df.select(corr($"High", $"Volume")).show()
+df.select(max("Volume"),min("Volume")).show()
 
 ```
 ```sh
-+--------------------+
-|  corr(High, Volume)|
-+--------------------+
-|-0.20960233287942157|
-+--------------------+
++-----------+-----------+
+|max(Volume)|min(Volume)|
++-----------+-----------+
+|  315541800|    3531300|
++-----------+-----------+
 
 ```
  ## 11. ¿Cuál es el máximo y mínimo de la columna “Volumen”?
