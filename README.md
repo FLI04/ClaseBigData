@@ -603,7 +603,7 @@ scala>  df2.groupBy("Year").max("High").show()
 scala> val df3 = df2.withColumn("Month", month(df("Date")))
 df3: org.apache.spark.sql.DataFrame = [Date: date, Open: double ... 7 more fields]
 
-scala>     df3.groupBy("Month").avg("Close").show()
+scala>    df3.groupBy("Month").avg("Close").show()
 +-----+------------------+
 |Month|        avg(Close)|
 +-----+------------------+
