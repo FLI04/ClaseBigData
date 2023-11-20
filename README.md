@@ -622,5 +622,68 @@ scala>    df3.groupBy("Month").avg("Close").show()
 +-----+------------------+
 ```
 
+# Unit2 Practice 1 LINEAR REGRESSION EXERCISE
+### Import LinearRegression
+```scala
+import org.apache.spark.ml.regression.LinearRegression
+import org.apache.spark.sql.SparkSession
+```
+```sh
+scala> import org.apache.spark.ml.regression.LinearRegression
+import org.apache.spark.ml.regression.LinearRegression
 
+scala> import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.SparkSession
+```
+### Opcional: Utilice el siguiente codigo para configurar errores
+```scala
+import org.apache.log4j._
+Logger.getLogger("org").setLevel(Level.ERROR)
+```
+```sh
+scala> import org.apache.log4j._
+import org.apache.log4j._
+scala> Logger.getLogger("org").setLevel(Level.ERROR)
+```
+
+### Inicie una simple Sesion Spark
+```scala
+val spark = SparkSession.builder().getOrCreate()
+```
+```sh
+scala> val spark = SparkSession.builder().getOrCreate()
+spark: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@60a0f09f
+```
+
+### Utilice Spark para el archivo csv Clean-Ecommerce 
+```scala
+val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("Clean-Ecommerce.csv")
+```
+```sh
+scala> val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("Clean-Ecommerce.csv")
+data: org.apache.spark.sql.DataFrame = [Email: string, Avatar: string ... 5 more fields]
+```
+### Imprima el schema en el DataFrame
+```scala
+data.printSchema()
+```
+```sh
+scala> data.printSchema()
+root
+ |-- Email: string (nullable = true)
+ |-- Avatar: string (nullable = true)
+ |-- Avg Session Length: double (nullable = true)
+ |-- Time on App: double (nullable = true)
+ |-- Time on Website: double (nullable = true)
+ |-- Length of Membership: double (nullable = true)
+ |-- Yearly Amount Spent: double (nullable = true)
+```
+### Imprima un renglon de ejemplo del DataFrane.
+```scala
+data.head(1)
+```
+```sh
+scala> data.head(1)
+res2: Array[org.apache.spark.sql.Row] = Array([mstephenson@fernandez.com,Violet,34.49726772511229,12.65565114916675,39.57766801952616,4.0826206329529615,587.9510539684005])
+```
 
