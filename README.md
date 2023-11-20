@@ -686,4 +686,40 @@ data.head(1)
 scala> data.head(1)
 res2: Array[org.apache.spark.sql.Row] = Array([mstephenson@fernandez.com,Violet,34.49726772511229,12.65565114916675,39.57766801952616,4.0826206329529615,587.9510539684005])
 ```
+### Transforme el data frame para que tome la forma de ("label","features")
+### Importe VectorAssembler y Vectors
+```scala
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.linalg.Vectors
+```
+```sh
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.linalg.Vectors
+```
+
+### Renombre la columna Yearly Amount Spent como "label", Tambien de los datos tome solo la columa numerica, Deje todo esto como un nuevo DataFrame que se llame df
+```scala
+data.columns
+val df = data.select(data("Yearly Amount Spent").as("label"), $"Avg Session Length", $"Time on App", $"Time on Website", $"Length of Membership")
+```
+```sh
+val res3: Array[String] = Array(Email, Avatar, Avg Session Length, Time on App, Time on Website, Length of Membership, Yearly Amount Spent)
+val df: org.apache.spark.sql.DataFrame = [label: double, Avg Session Length: double ... 3 more fields]
+```
+
+### Utilice el objeto VectorAssembler para convertir la columnas de entradas del df, a una sola columna de salida de un arreglo llamado  "features", Configure las columnas de entrada de donde se supone que leemos los valores, Llamar a esto nuevo assambler.
+```scala
+val assembler = new VectorAssembler().setInputCols(Array("Avg Session Length", "Time on App", "Time on Website", "Length of Membership")).setOutputCol("features")
+```
+```sh
+val assembler: org.apache.spark.ml.feature.VectorAssembler = VectorAssembler: uid=vecAssembler_115df6a50100, handleInvalid=error, numInputCols=4
+```
+
+### Utilice el assembler para transform nuestro DataFrame a dos columnas: label and features
+```scala
+val output = assembler.transform(df).select($"label", $"features")
+```
+```sh
+val output: org.apache.spark.sql.DataFrame = [label: double, features: vector]
+```
 

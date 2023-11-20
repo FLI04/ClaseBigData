@@ -34,10 +34,13 @@ data.head(1)
 // ("label","features")
 
 // Importe VectorAssembler y Vectors
-
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.linalg.Vectors
 // Renombre la columna Yearly Amount Spent como "label"
 // Tambien de los datos tome solo la columa numerica 
 // Deje todo esto como un nuevo DataFrame que se llame df
+data.columns
+val df = data.select(data("Yearly Amount Spent").as("label"), $"Avg Session Length", $"Time on App", $"Time on Website", $"Length of Membership")
 
 // Que el objeto assembler convierta los valores de entrada a un vector
 
@@ -45,9 +48,12 @@ data.head(1)
 // Utilice el objeto VectorAssembler para convertir la columnas de entradas del df
 // a una sola columna de salida de un arreglo llamado  "features"
 // Configure las columnas de entrada de donde se supone que leemos los valores.
-// Llamar a esto nuevo assambler.
+// Llamar a esto nuevo assambler
+
+val assembler = new VectorAssembler().setInputCols(Array("Avg Session Length", "Time on App", "Time on Website", "Length of Membership")).setOutputCol("features")
 
 // Utilice el assembler para transform nuestro DataFrame a dos columnas: label and features
+val output = assembler.transform(df).select($"label", $"features")
 
 
 // Crear un objeto para modelo de regresion linea.
