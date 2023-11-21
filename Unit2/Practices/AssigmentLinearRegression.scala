@@ -57,18 +57,25 @@ val output = assembler.transform(df).select($"label", $"features")
 
 
 // Crear un objeto para modelo de regresion linea.
-
+var lr = new LinearRegression()
 
 // Ajuste el modelo para los datos y llame a este modelo lrModelo
 
+var lrModelo = lr.fit(output)
+
 
 // Imprima the  coefficients y intercept para la regresion lineal
-
+lrModelo.coefficients
+lrModelo.intercept
 // Resuma el modelo sobre el conjunto de entrenamiento imprima la salida de algunas metricas!
 // Utilize metodo .summary de nuestro  modelo para crear un objeto
 // llamado trainingSummary
-
 // Muestre los valores de residuals, el RMSE, el MSE, y tambien el R^2 .
+val trainingSummary = lrModelo.summary
 
+trainingSummary.residuals.show()
+trainingSummary.rootMeanSquaredError
+trainingSummary.meanSquaredError
+trainingSummary.r2
 
 // Buen trabajo!

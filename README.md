@@ -723,3 +723,88 @@ val output = assembler.transform(df).select($"label", $"features")
 val output: org.apache.spark.sql.DataFrame = [label: double, features: vector]
 ```
 
+### Crear un objeto para modelo de regresion linea.
+```scala
+var lr = new LinearRegression()
+```
+```sh
+scala> var lr = new LinearRegression()
+lr: org.apache.spark.ml.regression.LinearRegression = linReg_06172a1924ab
+```
+
+###  Ajuste el modelo para los datos y llame a este modelo lrModelo
+```scala
+var lrModelo = lr.fit(output)
+```
+```sh
+scala> var lrModelo = lr.fit(output)
+23/11/20 15:17:06 WARN Instrumentation: [959d57c4] regParam is zero, which might cause numerical instability and overfitting.
+lrModelo: org.apache.spark.ml.regression.LinearRegressionModel = LinearRegressionModel: uid=linReg_06172a1924ab, numFeatures=4
+```
+
+### Imprima the  coefficients y intercept para la regresion lineal
+```scala
+lrModelo.coefficients
+lrModelo.intercept
+```
+```sh
+scala> lrModelo.coefficients
+res19: org.apache.spark.ml.linalg.Vector = [25.734271084670716,38.709153810828816,0.43673883558514964,61.57732375487594]
+
+scala> lrModelo.intercept
+res20: Double = -1051.5942552990748
+```
+
+### Resuma el modelo sobre el conjunto de entrenamiento imprima la salida de algunas metricas!,Utilize metodo .summary de nuestro  modelo para crear un objeto llamado trainingSummary Muestre los valores de residuals, el RMSE, el MSE, y tambien el R^2 .
+```scala
+val trainingSummary = lrModelo.summary
+
+trainingSummary.residuals.show()
+trainingSummary.rootMeanSquaredError
+trainingSummary.meanSquaredError
+trainingSummary.r2
+```
+```sh
+scala> val trainingSummary = lrModelo.summary
+trainingSummary: org.apache.spark.ml.regression.LinearRegressionTrainingSummary = org.apache.spark.ml.regression.LinearRegressionTrainingSummary@626519ef
+
+scala>
+
+scala> trainingSummary.residuals.show()
++-------------------+
+|          residuals|
++-------------------+
+| -6.788234090018818|
+| 11.841128565326073|
+| -17.65262700858966|
+| 11.454889631178617|
+| 7.7833824373080915|
+|-1.8347332184773677|
+|  4.620232401352382|
+| -8.526545950978175|
+| 11.012210896516763|
+|-13.828032682158891|
+| -16.04456458615175|
+|  8.786634365463442|
+| 10.425717191807507|
+| 12.161293785003522|
+|  9.989313714461446|
+| 10.626662732649379|
+|  20.15641408428496|
+|-3.7708446586326545|
+| -4.129505481591934|
+|  9.206694655890487|
++-------------------+
+only showing top 20 rows
+
+
+scala> trainingSummary.rootMeanSquaredError
+res30: Double = 9.923256785022229
+
+scala> trainingSummary.meanSquaredError
+res31: Double = 98.47102522148971
+
+scala> trainingSummary.r2
+res32: Double = 0.9843155370226727
+```
+
