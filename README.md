@@ -962,3 +962,29 @@ training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: int, 
 test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: int, Daily Time Spent on Site: double ... 5 more fields]
 
 ```
+
+### Se importa el libreria para crear el objeto "pipeline", se crea el modelo de logisticRegression "lr"
+### Se entrena "pipeline" con "training" y se almacenan los resultados en "model"; se comprueba modelo "model" con test.
+```scala
+import org.apache.spark.ml.Pipeline
+
+val lr = new LogisticRegression()
+
+val pipeline = new Pipeline().setStages(Array(assembler, lr))
+
+val model = pipeline.fit(training)
+
+val results = model.transform(test)
+
+```
+```sh
+import org.apache.spark.ml.Pipeline
+
+val lr: org.apache.spark.ml.classification.LogisticRegression = logreg_51f26008df0a
+
+val pipeline: org.apache.spark.ml.Pipeline = pipeline_974abdabbda7
+
+val model: org.apache.spark.ml.PipelineModel = pipeline_974abdabbda7
+
+val results: org.apache.spark.sql.DataFrame = [label: int, Daily Time Spent on Site: double ... 9 more fields]
+```
