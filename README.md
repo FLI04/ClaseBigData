@@ -1016,6 +1016,7 @@ import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 ```
+
 ### Load dataset "sample_multiclass_classification_data.txt" on dataframe "data"
 ```scala
 val data = spark.read.format("libsvm").load("sample_multiclass_classification_data.txt")
@@ -1023,6 +1024,7 @@ val data = spark.read.format("libsvm").load("sample_multiclass_classification_da
 ```sh
 val data: org.apache.spark.sql.DataFrame = [label: double, features: vector]
 ```
+
 ### Split "data" in to "split" and set to dataframes: "train" with 60% of data and "test" with 40% of data.
 ```scala
 val splits = data.randomSplit(Array(0.6, 0.4), seed = 1234L)
@@ -1034,7 +1036,8 @@ val splits: Array[org.apache.spark.sql.Dataset[org.apache.spark.sql.Row]] = Arra
 val train: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
 val test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
 ```
-### crate "Layes arroy with values 4,5,4,3"; create Multilayer Perceptron Classifier "trainer"; fit "trainer" with "train in to model" 
+
+### crate "layers" array with values 4,5,4,3"; create Multilayer Perceptron Classifier "trainer"; fit "trainer" with "train in to model" 
 ```scala
 val layers = Array[Int](4, 5, 4, 3)
 val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setBlockSize(128).setSeed(1234L).setMaxIter(100)
@@ -1044,4 +1047,20 @@ val model = trainer.fit(train)
 val layers: Array[Int] = Array(4, 5, 4, 3)
 val trainer: org.apache.spark.ml.classification.MultilayerPerceptronClassifier = mlpc_699e01a3d082
 val model: org.apache.spark.ml.classification.MultilayerPerceptronClassificationModel = MultilayerPerceptronClassificationModel: uid=mlpc_699e01a3d082, numLayers=4, numClasses=3, numFeatures=4
+```
+
+### "result" validate "model" with "test"; create dataframe prediccionAndLabels with columns "prediction" and label from result; create a "evaluator Multiclass Classification Evaluator "accuracy" and print the "accuracy" from "predictionAndLabels".
+```scala
+val result = model.transform(test)
+val predictionAndLabels = result.select("prediction", "label")
+val evaluator = new MulticlassClassificationEvaluator().setMetricName("accuracy")
+
+println(s"Test set accuracy = ${evaluator.evaluate(predictionAndLabels)}")
+```
+```sh
+val result: org.apache.spark.sql.DataFrame = [label: double, features: vector ... 3 more fields]
+val predictionAndLabels: org.apache.spark.sql.DataFrame = [prediction: double, label: double]
+val predictionAndLabels: org.apache.spark.sql.DataFrame = [prediction: double, label: double]
+
+Test set accuracy = 0.9523809523809523
 ```
