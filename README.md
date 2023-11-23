@@ -807,4 +807,34 @@ res31: Double = 98.47102522148971
 scala> trainingSummary.r2
 res32: Double = 0.9843155370226727
 ```
+# Unit2 Practice 2 LINEAR LogisticRegression EXERCISE
+### Import LogisticRegression, SparkSession and Logger libraries, Create a Spark Session, load dataset "advertising.csv" into data & print Schema
+```scala
+import org.apache.spark.ml.classification.LogisticRegression
+import org.apache.spark.sql.SparkSession
 
+import org.apache.log4j._
+Logger.getLogger("org").setLevel(Level.ERROR)
+
+val spark = SparkSession.builder().getOrCreate()
+
+val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("advertising.csv")
+
+data.printSchema()
+```
+```sh
+import org.apache.log4j._
+val spark: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@16a58368
+val data: org.apache.spark.sql.DataFrame = [Daily Time Spent on Site: double, Age: int ... 8 more fields]
+root
+ |-- Daily Time Spent on Site: double (nullable = true)
+ |-- Age: integer (nullable = true)
+ |-- Area Income: double (nullable = true)
+ |-- Daily Internet Usage: double (nullable = true)
+ |-- Ad Topic Line: string (nullable = true)
+ |-- City: string (nullable = true)
+ |-- Male: integer (nullable = true)
+ |-- Country: string (nullable = true)
+ |-- Timestamp: timestamp (nullable = true)
+ |-- Clicked on Ad: integer (nullable = true)
+```
