@@ -838,3 +838,78 @@ root
  |-- Timestamp: timestamp (nullable = true)
  |-- Clicked on Ad: integer (nullable = true)
 ```
+
+### Despliega datos e imprime un renglon como ejemplo
+```scala
+data.head(1)
+
+val colnames = data.columns
+val firstrow = data.head(1)(0)
+println("\n")
+println("Example data row")
+for(ind <- Range(1, colnames.length)){
+    println(colnames(ind))
+    println(firstrow(ind))
+    println("\n")
+}
+
+```
+```sh
+scala> data.head(1)
+res6: Array[org.apache.spark.sql.Row] = Array([68.95,35,61833.9,256.09,Cloned 5thgeneration orchestration,Wrightburgh,0,Tunisia,2016-03-27 00:53:11.0,0])
+
+scala>
+
+scala> val colnames = data.columns
+colnames: Array[String] = Array(Daily Time Spent on Site, Age, Area Income, Daily Internet Usage, Ad Topic Line, City, Male, Country, Timestamp, Clicked on Ad)
+
+scala> val firstrow = data.head(1)(0)
+firstrow: org.apache.spark.sql.Row = [68.95,35,61833.9,256.09,Cloned 5thgeneration orchestration,Wrightburgh,0,Tunisia,2016-03-27 00:53:11.0,0]
+
+scala> println("\n")
+
+
+
+scala> println("Example data row")
+Example data row
+
+scala> for(ind <- Range(1, colnames.length)){
+     |     println(colnames(ind))
+     |     println(firstrow(ind))
+     |     println("\n")
+     | }
+Age
+35
+
+
+Area Income
+61833.9
+
+
+Daily Internet Usage
+256.09
+
+
+Ad Topic Line
+Cloned 5thgeneration orchestration
+
+
+City
+Wrightburgh
+
+
+Male
+0
+
+
+Country
+Tunisia
+
+
+Timestamp
+2016-03-27 00:53:11.0
+
+
+Clicked on Ad
+0
+```
