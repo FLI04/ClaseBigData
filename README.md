@@ -1006,3 +1006,31 @@ metrics.accuracy
 import org.apache.spark.ml.Pipeline
 
 ```
+# Unit2 Practice 4 Multilayer Perceptron Classifier EXERCISE
+### Import MultilayerPerceptronClassifier & MulticlassClassificationEvaluator
+```scala
+import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+```
+```sh
+import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+```
+### Load dataset "sample_multiclass_classification_data.txt" on dataframe "data"
+```scala
+val data = spark.read.format("libsvm").load("sample_multiclass_classification_data.txt")
+```
+```sh
+val data: org.apache.spark.sql.DataFrame = [label: double, features: vector]
+```
+### Split "data" in to "split" and set to dataframes: "train" with 60% of data and "test" with 40% of data.
+```scala
+val splits = data.randomSplit(Array(0.6, 0.4), seed = 1234L)
+val train = splits(0)
+val test = splits(1)
+```
+```sh
+val splits: Array[org.apache.spark.sql.Dataset[org.apache.spark.sql.Row]] = Array([label: double, features: vector], [label: double, features: vector])
+val train: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
+val test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
+```
