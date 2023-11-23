@@ -1034,3 +1034,14 @@ val splits: Array[org.apache.spark.sql.Dataset[org.apache.spark.sql.Row]] = Arra
 val train: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
 val test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
 ```
+### crate "Layes arroy with values 4,5,4,3"; create Multilayer Perceptron Classifier "trainer"; fit "trainer" with "train in to model" 
+```scala
+val layers = Array[Int](4, 5, 4, 3)
+val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setBlockSize(128).setSeed(1234L).setMaxIter(100)
+val model = trainer.fit(train)
+```
+```sh
+val layers: Array[Int] = Array(4, 5, 4, 3)
+val trainer: org.apache.spark.ml.classification.MultilayerPerceptronClassifier = mlpc_699e01a3d082
+val model: org.apache.spark.ml.classification.MultilayerPerceptronClassificationModel = MultilayerPerceptronClassificationModel: uid=mlpc_699e01a3d082, numLayers=4, numClasses=3, numFeatures=4
+```
