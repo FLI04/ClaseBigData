@@ -988,3 +988,21 @@ val model: org.apache.spark.ml.PipelineModel = pipeline_974abdabbda7
 
 val results: org.apache.spark.sql.DataFrame = [label: int, Daily Time Spent on Site: double ... 9 more fields]
 ```
+
+### Se importa el libreria para "MulticlassMetrics", se crea un dataframe "predictionAndLabels" con las columnas "prediccion" y "label" de "results" y las convertimos en RDD; calculamos las MulticlassMetric de "predictionAndLabels" y los almacenamos en metrics
+### imprimimos el encabezado "Confusion matrix:" e imprmimimos "metrics.confusionMatrix"; por ultimo imprimimos "metrics.accuracy".
+```scala
+import org.apache.spark.mllib.evaluation.MulticlassMetrics
+
+val predictionAndLabels = results.select($"prediction",$"label").as[(Double, Double)].rdd
+val metrics = new MulticlassMetrics(predictionAndLabels)
+
+println("Confusion matrix:")
+println(metrics.confusionMatrix)
+
+metrics.accuracy
+```
+```sh
+import org.apache.spark.ml.Pipeline
+
+```
