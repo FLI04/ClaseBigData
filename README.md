@@ -1037,7 +1037,7 @@ val train: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: doub
 val test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
 ```
 
-### crate "layers" array with values 4,5,4,3"; create Multilayer Perceptron Classifier "trainer"; fit "trainer" with "train in to model" 
+### create "layers" array with values 4,5,4,3"; create Multilayer Perceptron Classifier "trainer"; fit "trainer" with "train in to model" 
 ```scala
 val layers = Array[Int](4, 5, 4, 3)
 val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setBlockSize(128).setSeed(1234L).setMaxIter(100)
