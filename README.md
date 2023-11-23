@@ -913,3 +913,52 @@ Timestamp
 Clicked on Ad
 0
 ```
+
+### Se crea nueva columna llamada "Hour" de la hora de la columna "Timestamp"
+### Se crea un nuevo Dataframe llamado "logregdata", con "Clicked on Ad" como "label" y las siguientes columnas para "features": "Daily Time Spent on Site","Age","Area Income","Daily Internet Usage","Timestamp","Male"
+```scala
+val timedata = data.withColumn("Hour",hour(data("Timestamp")))
+
+val logregdata = timedata.select(data("Clicked on Ad").as("label"), $"Daily Time Spent on Site", $"Age", $"Area Income", $"Daily Internet Usage", $"Hour", $"Male")
+```
+```sh
+scala> val timedata = data.withColumn("Hour",hour(data("Timestamp")))
+timedata: org.apache.spark.sql.DataFrame = [Daily Time Spent on Site: double, Age: int ... 9 more fields]
+
+scala> val logregdata = timedata.select(data("Clicked on Ad").as("label"), $"Daily Time Spent on Site", $"Age", $"Area Income", $"Daily Internet Usage", $"Hour", $"Male")
+logregdata: org.apache.spark.sql.DataFrame = [label: int, Daily Time Spent on Site: double ... 5 more fields]
+```
+### Cree un nuevo objeto VectorAssembler llamado "assembler" para los features
+```scala
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.linalg.Vectors
+
+val assembler = (new VectorAssembler()
+                  .setInputCols(Array("Daily Time Spent on Site", "Age","Area Income","Daily Internet Usage","Hour","Male"))
+                  .setOutputCol("features"))
+```
+```sh
+scala> import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.feature.VectorAssembler
+
+
+scala> import org.apache.spark.ml.linalg.Vectors
+import org.apache.spark.ml.linalg.Vectors
+
+scala> val assembler = (new VectorAssembler()
+     |                   .setInputCols(Array("Daily Time Spent on Site", "Age","Area Income","Daily Internet Usage","Hour","Male"))
+     |                   .setOutputCol("features"))
+assembler: org.apache.spark.ml.feature.VectorAssembler = VectorAssembler: uid=vecAssembler_a24189aef859, handleInvalid=error, numInputCols=6
+
+```
+
+### Se crean arreglos "training & test" usando radomSplit con los 70 y 30 por ciento respectivamente
+```scala
+val Array(training, test) = logregdata.randomSplit(Array(0.7, 0.3), seed = 12345)
+```
+```sh
+scala> val Array(training, test) = logregdata.randomSplit(Array(0.7, 0.3), seed = 12345)
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: int, Daily Time Spent on Site: double ... 5 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: int, Daily Time Spent on Site: double ... 5 more fields]
+
+```
