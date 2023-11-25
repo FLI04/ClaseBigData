@@ -61,3 +61,15 @@ val model = pipeline.fit(training)
 
 //Evalua el modelo
 val results = model.transform(test)
+
+//Imprime los primeros 20 resultados
+results.show()
+
+//seleccciona las metricas a evaluar
+val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("accuracy")
+
+//determina la precision del modelo
+val accuracy = evaluator.evaluate(results)
+
+//Imprime la presicion
+ println(s"Accuracy = ${accuracy}")
