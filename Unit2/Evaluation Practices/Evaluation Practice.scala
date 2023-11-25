@@ -23,3 +23,20 @@ data.columns
 //Imprime Schema
 data.printSchema()
 
+//Imprime los primeros 5 renglones
+data.head(5)
+
+//Describe el tipo 
+data.describe().show()
+
+//Determina las columnas que sera las salidas como features
+val assembler = new VectorAssembler().setInputCols(Array("sepal_length", "sepal_width", "petal_length", "petal_width")).setOutputCol("features")
+
+//Separa los datos que se usaran como features
+val features = assembler.transform(data)
+
+//Transforma los datos label categoricos a numericos
+val indexerLabel = new StringIndexer().setInputCol("species").setOutputCol("indexedLabel").fit(features)
+
+//Transforma los datos features categoricos a numericos con limitante de 4
+val indexerFeatures = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(4)

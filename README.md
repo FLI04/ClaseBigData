@@ -1313,4 +1313,55 @@ root
  |-- species: string (nullable = true)
 ```
 
+### 4. Imprime las primeras 5 columnas. 
+```scala
+data.head(5)
+```
+```sh
+scala> data.head(5)
+res4: Array[org.apache.spark.sql.Row] = Array([5.1,3.5,1.4,0.2,setosa], [4.9,3.0,1.4,0.2,setosa], [4.7,3.2,1.3,0.2,setosa], [4.6,3.1,1.5,0.2,setosa], [5.0,3.6,1.4,0.2,setosa])
+```
+
+### 5. Usa el método describe () para aprender más sobre los datos del DataFrame. 
+```scala
+data.describe().show()
+```
+```sh
+scala> data.describe().show()
+23/11/24 20:56:38 WARN package: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
++-------+------------------+-------------------+------------------+------------------+---------+
+|summary|      sepal_length|        sepal_width|      petal_length|       petal_width|  species|
++-------+------------------+-------------------+------------------+------------------+---------+
+|  count|               150|                150|               150|               150|      150|
+|   mean| 5.843333333333335| 3.0540000000000007|3.7586666666666693|1.1986666666666672|     null|
+| stddev|0.8280661279778637|0.43359431136217375| 1.764420419952262|0.7631607417008414|     null|
+|    min|               4.3|                2.0|               1.0|               0.1|   setosa|
+|    max|               7.9|                4.4|               6.9|               2.5|virginica|
++-------+------------------+-------------------+------------------+------------------+---------+
+```
+### 6. Haga la transformación pertinente para los datos categóricos los cuales serán  nuestras etiquetas a clasificar.
+```scala
+val assembler = new VectorAssembler().setInputCols(Array("sepal_length", "sepal_width", "petal_length", "petal_width")).setOutputCol("features")
+
+val features = assembler.transform(data)
+
+val indexerLabel = new StringIndexer().setInputCol("species").setOutputCol("indexedLabel").fit(features)
+
+val indexerFeatures = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(4)
+
+```
+```sh
+scala> val assembler = new VectorAssembler().setInputCols(Array("sepal_length", "sepal_width", "petal_length", "petal_width")).setOutputCol("features")
+assembler: org.apache.spark.ml.feature.VectorAssembler = VectorAssembler: uid=vecAssembler_fb6ad8221ba9, handleInvalid=error, numInputCols=4
+
+scala> val features = assembler.transform(data)
+features: org.apache.spark.sql.DataFrame = [sepal_length: double, sepal_width: double ... 4 more fields]
+
+scala> val indexerLabel = new StringIndexer().setInputCol("species").setOutputCol("indexedLabel").fit(features)
+indexerLabel: org.apache.spark.ml.feature.StringIndexerModel = StringIndexerModel: uid=strIdx_a32a4d308ba6, handleInvalid=error
+
+scala> val indexerFeatures = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(4)
+indexerFeatures: org.apache.spark.ml.feature.VectorIndexer = vecIdx_2539c0f63f1f
+
+```
 
