@@ -1006,6 +1006,62 @@ metrics.accuracy
 import org.apache.spark.ml.Pipeline
 
 ```
+
+# Unit2 Practice 3 Decision tree classifier EXERCISE
+### Import libraries
+```scala
+import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.classification.DecisionTreeClassificationModel
+import org.apache.spark.ml.classification.DecisionTreeClassifier
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer}
+import org.apache.spark.ml.feature.{StringIndexer, VectorAssembler}
+```
+```sh
+scala> import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.Pipeline
+
+scala> import org.apache.spark.ml.classification.DecisionTreeClassificationModel
+import org.apache.spark.ml.classification.DecisionTreeClassificationModel
+
+scala> import org.apache.spark.ml.classification.DecisionTreeClassifier
+import org.apache.spark.ml.classification.DecisionTreeClassifier
+
+scala> import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+
+scala> import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer}
+import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer}
+
+scala> import org.apache.spark.ml.feature.{StringIndexer, VectorAssembler}
+import org.apache.spark.ml.feature.{StringIndexer, VectorAssembler}
+```
+### Load the data stored in LIBSVM format as a DataFrame.
+```scala
+val data = spark.read.format("libsvm").load("sample_libsvm_data.txt")
+```
+```sh
+scala> val data = spark.read.format("libsvm").load("sample_libsvm_data.txt")
+23/11/24 19:58:20 WARN LibSVMFileFormat: 'numFeatures' option not specified, determining the number of features by going though the input. If you know the number in advance, please specify it via 'numFeatures' option to avoid the extra scan.
+data: org.apache.spark.sql.DataFrame = [label: double, features: vector]
+```
+### Index labels, adding metadata to the label column. Fit on whole dataset to include all labels in index.
+```scala
+val labelIndexer = new StringIndexer().setInputCol("label").setOutputCol("indexedLabel").fit(data)
+```
+```sh
+scala> val labelIndexer = new StringIndexer().setInputCol("label").setOutputCol("indexedLabel").fit(data)
+labelIndexer: org.apache.spark.ml.feature.StringIndexerModel = StringIndexerModel: uid=strIdx_64c1c5523909, handleInvalid=error
+```
+### Automatically identify categorical features, and index them. Features with > 4 distinct values are treated as continuous.
+```scala
+val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(4).fit(data)
+```
+```sh
+scala> val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(4).fit(data)
+featureIndexer: org.apache.spark.ml.feature.VectorIndexerModel = VectorIndexerModel: uid=vecIdx_be03681c57d9, numFeatures=692, handleInvalid=error
+```
+
 # Unit2 Practice 4 Multilayer Perceptron Classifier EXERCISE
 ### Import MultilayerPerceptronClassifier & MulticlassClassificationEvaluator
 ```scala
