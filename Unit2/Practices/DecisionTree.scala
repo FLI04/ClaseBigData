@@ -24,7 +24,7 @@ val Array(trainingData, testData) = data.randomSplit(Array(0.7, 0.3))
 // Train a DecisionTree model.
 val dt = new DecisionTreeClassifier().setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures")
 
-// Convert indexed labels back to original labels. -----------
+// Convert indexed labels back to original labels. 
 val labelConverter = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(labelIndexer.labelsArray(0))
 
 // Chain indexers and tree in a Pipeline.

@@ -1061,6 +1061,32 @@ val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("i
 scala> val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(4).fit(data)
 featureIndexer: org.apache.spark.ml.feature.VectorIndexerModel = VectorIndexerModel: uid=vecIdx_be03681c57d9, numFeatures=692, handleInvalid=error
 ```
+### Split the data into training and test sets (30% held out for testing).
+```scala
+val Array(trainingData, testData) = data.randomSplit(Array(0.7, 0.3))
+```
+```sh
+scala> val Array(trainingData, testData) = data.randomSplit(Array(0.7, 0.3))
+trainingData: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
+testData: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
+```
+### Train Decision tree model
+```scala
+val dt = new DecisionTreeClassifier().setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures")
+```
+```sh
+scala> val dt = new DecisionTreeClassifier().setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures")
+dt: org.apache.spark.ml.classification.DecisionTreeClassifier = dtc_443edf070bad
+```
+
+### Convert indexed labels back to original labels.
+```scala
+val dt = new DecisionTreeClassifier().setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures")
+```
+```sh
+scala> val labelConverter = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(labelIndexer.labelsArray(0))
+labelConverter: org.apache.spark.ml.feature.IndexToString = idxToStr_e24177588885
+```
 
 # Unit2 Practice 4 Multilayer Perceptron Classifier EXERCISE
 ### Import MultilayerPerceptronClassifier & MulticlassClassificationEvaluator
