@@ -40,3 +40,24 @@ val indexerLabel = new StringIndexer().setInputCol("species").setOutputCol("inde
 
 //Transforma los datos features categoricos a numericos con limitante de 4
 val indexerFeatures = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(4)
+
+//Se crean los arreglos que seran usados para training y test 70% y 30%
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 12345)
+
+//Se crean las capas
+val layers = Array[Int](4,6,2,3)
+
+//Se crea la estructura del modelo Multilayer Perceptron.
+val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures").setBlockSize(128).setSeed(1234).setMaxIter(100)
+
+//Convierte de numerico a categoricos los datos "Prediction"
+val converterLabel = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(indexerLabel.labels)
+
+//Mete los datos a la tuberia
+val pipeline = new Pipeline().setStages(Array(indexerLabel, indexerFeatures, trainer, converterLabel))
+
+//Entrena el modelo
+val model = pipeline.fit(training)
+
+//Evalua el modelo
+val results = model.transform(test)

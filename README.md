@@ -1365,3 +1365,44 @@ indexerFeatures: org.apache.spark.ml.feature.VectorIndexer = vecIdx_2539c0f63f1f
 
 ```
 
+### 7. Construya el modelo de clasificación y explique su arquitectura. 
+```scala
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 12345)
+
+val layers = Array[Int](4,6,2,3)
+
+val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures").setBlockSize(128).setSeed(1234).setMaxIter(100)
+
+val converterLabel = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(indexerLabel.labels)
+
+val pipeline = new Pipeline().setStages(Array(indexerLabel, indexerFeatures, trainer, converterLabel))
+
+val model = pipeline.fit(training)
+
+val results = model.transform(test)
+```
+
+```sh
+scala> val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 12345)
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [sepal_length: double, sepal_width: double ... 4 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [sepal_length: double, sepal_width: double ... 4 more fields]
+
+scala> val layers = Array[Int](4,6,2,3)
+layers: Array[Int] = Array(4, 6, 2, 3)
+
+scala> val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures").setBlockSize(128).setSeed(1234).setMaxIter(100)
+trainer: org.apache.spark.ml.classification.MultilayerPerceptronClassifier = mlpc_bde5f10da614
+
+scala> val converterLabel = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(indexerLabel.labels)
+warning: one deprecation (since 3.0.0); for details, enable `:setting -deprecation' or `:replay -deprecation'
+converterLabel: org.apache.spark.ml.feature.IndexToString = idxToStr_aa84e603412d
+
+scala> val pipeline = new Pipeline().setStages(Array(indexerLabel, indexerFeatures, trainer, converterLabel))
+pipeline: org.apache.spark.ml.Pipeline = pipeline_3e1e175db02c
+
+scala> val model = pipeline.fit(training)
+model: org.apache.spark.ml.PipelineModel = pipeline_3e1e175db02c
+
+scala> val results = model.transform(test)
+results: org.apache.spark.sql.DataFrame = [sepal_length: double, sepal_width: double ... 10 more fields]
+```
