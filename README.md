@@ -1087,6 +1087,82 @@ val dt = new DecisionTreeClassifier().setLabelCol("indexedLabel").setFeaturesCol
 scala> val labelConverter = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(labelIndexer.labelsArray(0))
 labelConverter: org.apache.spark.ml.feature.IndexToString = idxToStr_e24177588885
 ```
+### Chain indexers and tree in a Pipeline.
+```scala
+val pipeline = new Pipeline().setStages(Array(labelIndexer, featureIndexer, dt, labelConverter))
+```
+```sh
+scala> val pipeline = new Pipeline().setStages(Array(labelIndexer, featureIndexer, dt, labelConverter))
+pipeline: org.apache.spark.ml.Pipeline = pipeline_3254113dd363
+```
+### Train model. This also runs the indexers.
+```scala
+val model = pipeline.fit(trainingData)
+```
+```sh
+scala> val model = pipeline.fit(trainingData)
+model: org.apache.spark.ml.PipelineModel = pipeline_3254113dd363
+```
+### Make Predictions
+```scala
+val predictions = model.transform(testData)
+```
+```sh
+scala> val predictions = model.transform(testData)
+predictions: org.apache.spark.sql.DataFrame = [label: double, features: vector ... 6 more fields]
+```
+### Select example rows to display.
+```scala
+predictions.select("predictedLabel", "label", "features").show(5)
+```
+```sh
+scala> predictions.select("predictedLabel", "label", "features").show(5)
++--------------+-----+--------------------+
+|predictedLabel|label|            features|
++--------------+-----+--------------------+
+|           0.0|  0.0|(692,[122,123,148...|
+|           0.0|  0.0|(692,[123,124,125...|
+|           0.0|  0.0|(692,[124,125,126...|
+|           0.0|  0.0|(692,[125,126,127...|
+|           0.0|  0.0|(692,[126,127,128...|
++--------------+-----+--------------------+
+only showing top 5 rows
+```
+### Select (prediction, true label) and compute test error.
+```scala
+val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("accuracy")
+val accuracy = evaluator.evaluate(predictions)
+println(s"Test Error = ${(1.0 - accuracy)}")
+
+val treeModel = model.stages(2).asInstanceOf[DecisionTreeClassificationModel]
+println(s"Learned classification tree model:\n ${treeModel.toDebugString}")
+```
+```sh
+scala> val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("accuracy")
+evaluator: org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator = MulticlassClassificationEvaluator: uid=mcEval_53ab2ac9bd96, metricName=accuracy, metricLabel=0.0, beta=1.0, eps=1.0E-15
+
+scala> val accuracy = evaluator.evaluate(predictions)
+accuracy: Double = 1.0
+
+scala> println(s"Test Error = ${(1.0 - accuracy)}")
+Test Error = 0.0
+
+scala>
+
+scala> val treeModel = model.stages(2).asInstanceOf[DecisionTreeClassificationModel]
+treeModel: org.apache.spark.ml.classification.DecisionTreeClassificationModel = DecisionTreeClassificationModel: uid=dtc_443edf070bad, depth=2, numNodes=5, numClasses=2, numFeatures=692
+
+scala> println(s"Learned classification tree model:\n ${treeModel.toDebugString}")
+Learned classification tree model:
+ DecisionTreeClassificationModel: uid=dtc_443edf070bad, depth=2, numNodes=5, numClasses=2, numFeatures=692
+  If (feature 434 <= 70.5)
+   If (feature 99 in {2.0})
+    Predict: 0.0
+   Else (feature 99 not in {2.0})
+    Predict: 1.0
+  Else (feature 434 > 70.5)
+   Predict: 0.0
+```
 
 # Unit2 Practice 4 Multilayer Perceptron Classifier EXERCISE
 ### Import MultilayerPerceptronClassifier & MulticlassClassificationEvaluator
