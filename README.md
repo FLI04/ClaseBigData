@@ -1222,3 +1222,95 @@ val predictionAndLabels: org.apache.spark.sql.DataFrame = [prediction: double, l
 
 Test set accuracy = 0.9523809523809523
 ```
+
+# Evaluation Unit 2
+### Instrucciones Desarrollar las siguientes instrucciones en Spark con el lenguaje de  programación Scala, utilizando solo la documentación de la librería de  Machine Learning Mllib de Spark y Google. 
+### Cargar en un dataframe de la fuente de datos Iris.csv que se encuentra en  https://github.com/jcromerohdz/iris, elaborar la limpieza de datos necesaria para  ser procesado por el siguiente algoritmo (Importante, esta limpieza debe ser por  medio de un script de Scala en Spark). 
+
+### Utilice la librería Mllib de Spark el algoritmo de Machine Learning  Multilayer Perceptron Classifier
+```scala
+import org.apache.spark.ml.classification.MultilayerPerceptronClassifier 
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator 
+import org.apache.spark.ml.feature.IndexToString 
+import org.apache.spark.ml.feature.StringIndexer 
+import org.apache.spark.ml.feature.VectorIndexer 
+import org.apache.spark.ml.feature.VectorAssembler 
+import org.apache.spark.ml.Pipeline
+import org.apache.spark.sql.SparkSession
+
+import org.apache.log4j._
+Logger.getLogger("org").setLevel(Level.ERROR)
+val spark = SparkSession.builder().getOrCreate()
+val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("iris.csv")
+```
+```sh
+scala> import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
+import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
+
+scala> import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+
+scala> import org.apache.spark.ml.feature.IndexToString
+import org.apache.spark.ml.feature.IndexToString
+
+scala> import org.apache.spark.ml.feature.StringIndexer
+import org.apache.spark.ml.feature.StringIndexer
+
+scala> import org.apache.spark.ml.feature.VectorIndexer
+import org.apache.spark.ml.feature.VectorIndexer
+
+scala> import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.feature.VectorAssembler
+
+scala> import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.Pipeline
+
+scala> import org.apache.log4j._Logger.getLogger("org").setLevel(Level.ERROR)
+<console>:1: error: ';' expected but '(' found.
+       import org.apache.log4j._Logger.getLogger("org").setLevel(Level.ERROR)
+                                                ^
+
+scala> import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.SparkSession
+
+scala> import org.apache.log4j._Logger.getLogger("org").setLevel(Level.ERROR)
+<console>:1: error: ';' expected but '(' found.
+       import org.apache.log4j._Logger.getLogger("org").setLevel(Level.ERROR)
+                                                ^
+
+scala> import org.apache.log4j._
+import org.apache.log4j._
+
+scala> Logger.getLogger("org").setLevel(Level.ERROR)
+
+scala> val spark = SparkSession.builder().getOrCreate()
+spark: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@2bdf341a
+
+scala> val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("iris.csv")
+data: org.apache.spark.sql.DataFrame = [sepal_length: double, sepal_width: double ... 3 more fields]
+```
+
+###  2 ¿Cuáles son los nombres de las columnas? 
+```scala
+data.columns
+```
+```sh
+scala> data.columns
+res1: Array[String] = Array(sepal_length, sepal_width, petal_length, petal_width, species)
+```
+### 3. ¿Cómo es el esquema? 
+
+```scala
+data.printSchema()
+```
+```sh
+scala> data.printSchema()
+root
+ |-- sepal_length: double (nullable = true)
+ |-- sepal_width: double (nullable = true)
+ |-- petal_length: double (nullable = true)
+ |-- petal_width: double (nullable = true)
+ |-- species: string (nullable = true)
+```
+
+
