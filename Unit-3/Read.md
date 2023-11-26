@@ -579,7 +579,7 @@ scala>  println(s"Accuracy = ${accuracy}")
 Accuracy = 0.8843072399852995
 ```
 
-### Run 10 - Seed 65444
+### Run 10 - Seed 80975
 ```scala
 val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 80975) // vuelta 10
 
