@@ -181,3 +181,452 @@ val accuracy: Double = 0.882258064516129
 
 Accuracy = 0.882258064516129
 ```
+
+### Run 2 - Seed 54321
+```scala
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 54321) // vuelta 2
+
+//Entrena el modelo
+val model = pipeline.fit(training)
+
+//Evalua el modelo
+val results = model.transform(test)
+
+//determina la precision del modelo
+val accuracy = evaluator.evaluate(results)
+
+//Imprime la presicion
+ println(s"Accuracy = ${accuracy}")
+
+```
+
+```sh
+scala> val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 54321)
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+
+scala> val model = pipeline.fit(training)
+model: org.apache.spark.ml.PipelineModel = pipeline_ed667245c125
+
+scala> val results = model.transform(test)
+results: org.apache.spark.sql.DataFrame = [age: int, job: int ... 20 more fields]
+
+scala> val accuracy = evaluator.evaluate(results)
+accuracy: Double = 0.8861542996094613
+
+scala>  println(s"Accuracy = ${accuracy}")
+Accuracy = 0.8861542996094613
+```
+### Run 3 - Seed 54321
+```scala
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 41872) // Run 3
+
+//Entrena el modelo
+val model = pipeline.fit(training)
+
+//Evalua el modelo
+val results = model.transform(test)
+
+//determina la precision del modelo
+val accuracy = evaluator.evaluate(results)
+
+//Imprime la presicion
+ println(s"Accuracy = ${accuracy}")
+
+```
+
+```sh
+scala> val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 41872) // Run 3
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+
+scala>
+
+scala> //Entrena el modelo
+
+scala> val model = pipeline.fit(training)
+model: org.apache.spark.ml.PipelineModel = pipeline_ed667245c125
+
+scala>
+
+scala> //Evalua el modelo
+
+scala> val results = model.transform(test)
+results: org.apache.spark.sql.DataFrame = [age: int, job: int ... 20 more fields]
+
+scala>
+
+scala> //determina la precision del modelo
+
+scala> val accuracy = evaluator.evaluate(results)
+accuracy: Double = 0.8845173041894353
+
+scala>
+
+scala> //Imprime la presicion
+
+scala>  println(s"Accuracy = ${accuracy}")
+Accuracy = 0.8845173041894353
+```
+### Run 4 - Seed 24947
+```scala
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 24947) // vuelta 4
+
+//Entrena el modelo
+val model = pipeline.fit(training)
+
+//Evalua el modelo
+val results = model.transform(test)
+
+//determina la precision del modelo
+val accuracy = evaluator.evaluate(results)
+
+//Imprime la presicion
+ println(s"Accuracy = ${accuracy}")
+
+```
+
+```sh
+scala> val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 24947) // vuelta 4
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+
+scala>
+
+scala> //Entrena el modelo
+
+scala> val model = pipeline.fit(training)
+model: org.apache.spark.ml.PipelineModel = pipeline_ed667245c125
+
+scala>
+
+scala> //Evalua el modelo
+
+scala> val results = model.transform(test)
+results: org.apache.spark.sql.DataFrame = [age: int, job: int ... 20 more fields]
+
+scala>
+
+scala> //determina la precision del modelo
+
+scala> val accuracy = evaluator.evaluate(results)
+accuracy: Double = 0.8899096053501874
+
+scala>
+
+scala> //Imprime la presicion
+
+scala>  println(s"Accuracy = ${accuracy}")
+Accuracy = 0.8899096053501874
+```
+### Run 5 - Seed 45868
+```scala
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 45868) // vuelta 5
+
+//Entrena el modelo
+val model = pipeline.fit(training)
+
+//Evalua el modelo
+val results = model.transform(test)
+
+//determina la precision del modelo
+val accuracy = evaluator.evaluate(results)
+
+//Imprime la presicion
+ println(s"Accuracy = ${accuracy}")
+
+```
+
+```sh
+scala> val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 45868) // vuelta 5
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+
+scala>
+
+scala> //Entrena el modelo
+
+scala> val model = pipeline.fit(training)
+model: org.apache.spark.ml.PipelineModel = pipeline_ed667245c125
+
+scala>
+
+scala> //Evalua el modelo
+
+scala> val results = model.transform(test)
+results: org.apache.spark.sql.DataFrame = [age: int, job: int ... 20 more fields]
+
+scala>
+
+scala> //determina la precision del modelo
+
+scala> val accuracy = evaluator.evaluate(results)
+accuracy: Double = 0.8832555036691128
+
+scala>
+
+scala> //Imprime la presicion
+
+scala>  println(s"Accuracy = ${accuracy}")
+Accuracy = 0.8832555036691128
+```
+
+### Run 6 - Seed 17875
+```scala
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 17875) // vuelta 6
+
+//Entrena el modelo
+val model = pipeline.fit(training)
+
+//Evalua el modelo
+val results = model.transform(test)
+
+//determina la precision del modelo
+val accuracy = evaluator.evaluate(results)
+
+//Imprime la presicion
+ println(s"Accuracy = ${accuracy}")
+
+```
+
+```sh
+scala> val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 17875) // vuelta 6
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+
+scala>
+
+scala> //Entrena el modelo
+
+scala> val model = pipeline.fit(training)
+model: org.apache.spark.ml.PipelineModel = pipeline_ed667245c125
+
+scala>
+
+scala> //Evalua el modelo
+
+scala> val results = model.transform(test)
+results: org.apache.spark.sql.DataFrame = [age: int, job: int ... 20 more fields]
+
+scala>
+
+scala> //determina la precision del modelo
+
+scala> val accuracy = evaluator.evaluate(results)
+accuracy: Double = 0.8798876487545273
+
+scala>
+
+scala> //Imprime la presicion
+
+scala>  println(s"Accuracy = ${accuracy}")
+Accuracy = 0.8798876487545273
+```
+
+### Run 7 - Seed 93172
+```scala
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 93172) // vuelta 7
+
+//Entrena el modelo
+val model = pipeline.fit(training)
+
+//Evalua el modelo
+val results = model.transform(test)
+
+//determina la precision del modelo
+val accuracy = evaluator.evaluate(results)
+
+//Imprime la presicion
+ println(s"Accuracy = ${accuracy}")
+
+```
+
+```sh
+scala> val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 93172) // vuelta 7
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+
+scala>
+
+scala> //Entrena el modelo
+
+scala> val model = pipeline.fit(training)
+model: org.apache.spark.ml.PipelineModel = pipeline_ed667245c125
+
+scala>
+
+scala> //Evalua el modelo
+
+scala> val results = model.transform(test)
+results: org.apache.spark.sql.DataFrame = [age: int, job: int ... 20 more fields]
+
+scala>
+
+scala> //determina la precision del modelo
+
+scala> val accuracy = evaluator.evaluate(results)
+accuracy: Double = 0.8791420118343195
+
+scala>
+
+scala> //Imprime la presicion
+
+scala>  println(s"Accuracy = ${accuracy}")
+Accuracy = 0.8791420118343195
+```
+
+### Run 8 - Seed 22287
+```scala
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 22287) // vuelta 8
+
+//Entrena el modelo
+val model = pipeline.fit(training)
+
+//Evalua el modelo
+val results = model.transform(test)
+
+//determina la precision del modelo
+val accuracy = evaluator.evaluate(results)
+
+//Imprime la presicion
+ println(s"Accuracy = ${accuracy}")
+
+```
+
+```sh
+scala> val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 22287) // vuelta 8
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+
+scala>
+
+scala> //Entrena el modelo
+
+scala> val model = pipeline.fit(training)
+model: org.apache.spark.ml.PipelineModel = pipeline_ed667245c125
+
+scala>
+
+scala> //Evalua el modelo
+
+scala> val results = model.transform(test)
+results: org.apache.spark.sql.DataFrame = [age: int, job: int ... 20 more fields]
+
+scala>
+
+scala> //determina la precision del modelo
+
+scala> val accuracy = evaluator.evaluate(results)
+accuracy: Double = 0.8848350018539117
+
+scala>
+
+scala> //Imprime la presicion
+
+scala>  println(s"Accuracy = ${accuracy}")
+Accuracy = 0.8848350018539117
+```
+
+### Run 9 - Seed 65444
+```scala
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 65444) // vuelta 9
+
+//Entrena el modelo
+val model = pipeline.fit(training)
+
+//Evalua el modelo
+val results = model.transform(test)
+
+//determina la precision del modelo
+val accuracy = evaluator.evaluate(results)
+
+//Imprime la presicion
+ println(s"Accuracy = ${accuracy}")
+
+```
+
+```sh
+scala> val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 65444) // vuelta 9
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+
+scala>
+
+scala> //Entrena el modelo
+
+scala> val model = pipeline.fit(training)
+model: org.apache.spark.ml.PipelineModel = pipeline_ed667245c125
+
+scala>
+
+scala> //Evalua el modelo
+
+scala> val results = model.transform(test)
+results: org.apache.spark.sql.DataFrame = [age: int, job: int ... 20 more fields]
+
+scala>
+
+scala> //determina la precision del modelo
+
+scala> val accuracy = evaluator.evaluate(results)
+accuracy: Double = 0.8843072399852995
+
+scala>
+
+scala> //Imprime la presicion
+
+scala>  println(s"Accuracy = ${accuracy}")
+Accuracy = 0.8843072399852995
+```
+
+### Run 10 - Seed 65444
+```scala
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 80975) // vuelta 10
+
+//Entrena el modelo
+val model = pipeline.fit(training)
+
+//Evalua el modelo
+val results = model.transform(test)
+
+//determina la precision del modelo
+val accuracy = evaluator.evaluate(results)
+
+//Imprime la presicion
+ println(s"Accuracy = ${accuracy}")
+
+```
+
+```sh
+scala> val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 80975) // vuelta 10
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [age: int, job: int ... 14 more fields]
+
+scala>
+
+scala> //Entrena el modelo
+
+scala> val model = pipeline.fit(training)
+model: org.apache.spark.ml.PipelineModel = pipeline_ed667245c125
+
+scala>
+
+scala> //Evalua el modelo
+
+scala> val results = model.transform(test)
+results: org.apache.spark.sql.DataFrame = [age: int, job: int ... 20 more fields]
+
+scala>
+
+scala> //determina la precision del modelo
+
+scala> val accuracy = evaluator.evaluate(results)
+accuracy: Double = 0.8836809449054347
+
+scala>
+
+scala> //Imprime la presicion
+
+scala>  println(s"Accuracy = ${accuracy}")
+Accuracy = 0.8836809449054347
+```

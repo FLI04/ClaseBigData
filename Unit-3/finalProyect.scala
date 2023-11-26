@@ -42,17 +42,16 @@ val indexerLabel = new StringIndexer().setInputCol("y").setOutputCol("indexedLab
 val indexerFeatures = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(14)
 
 //Se crean los arreglos que seran usados para training y test 70% y 30%
-val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 12345) // vuelta 1
+//val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 12345) // vuelta 1
 val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 54321) // vuelta 2
-val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 41872) // vuelta 3
+/*val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 41872) // vuelta 3
 val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 24947) // vuelta 4
 val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 45868) // vuelta 5
 val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 17875) // vuelta 6
 val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 93172) // vuelta 7
 val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 22287) // vuelta 8
 val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 65444) // vuelta 9
-val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 80975) // vuelta 10
-
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 80975) // vuelta 10*/
 
 //Se crean las capas
 val layers = Array[Int](14,6,2,2)
