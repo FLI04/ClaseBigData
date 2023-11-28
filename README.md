@@ -622,5 +622,836 @@ scala>    df3.groupBy("Month").avg("Close").show()
 +-----+------------------+
 ```
 
+# Unit2 Practice 1 LINEAR REGRESSION EXERCISE
+### Import LinearRegression
+```scala
+import org.apache.spark.ml.regression.LinearRegression
+import org.apache.spark.sql.SparkSession
+```
+```sh
+scala> import org.apache.spark.ml.regression.LinearRegression
+import org.apache.spark.ml.regression.LinearRegression
 
+scala> import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.SparkSession
+```
+### Opcional: Utilice el siguiente codigo para configurar errores
+```scala
+import org.apache.log4j._
+Logger.getLogger("org").setLevel(Level.ERROR)
+```
+```sh
+scala> import org.apache.log4j._
+import org.apache.log4j._
+scala> Logger.getLogger("org").setLevel(Level.ERROR)
+```
+
+### Inicie una simple Sesion Spark
+```scala
+val spark = SparkSession.builder().getOrCreate()
+```
+```sh
+scala> val spark = SparkSession.builder().getOrCreate()
+spark: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@60a0f09f
+```
+
+### Utilice Spark para el archivo csv Clean-Ecommerce 
+```scala
+val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("Clean-Ecommerce.csv")
+```
+```sh
+scala> val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("Clean-Ecommerce.csv")
+data: org.apache.spark.sql.DataFrame = [Email: string, Avatar: string ... 5 more fields]
+```
+### Imprima el schema en el DataFrame
+```scala
+data.printSchema()
+```
+```sh
+scala> data.printSchema()
+root
+ |-- Email: string (nullable = true)
+ |-- Avatar: string (nullable = true)
+ |-- Avg Session Length: double (nullable = true)
+ |-- Time on App: double (nullable = true)
+ |-- Time on Website: double (nullable = true)
+ |-- Length of Membership: double (nullable = true)
+ |-- Yearly Amount Spent: double (nullable = true)
+```
+### Imprima un renglon de ejemplo del DataFrane.
+```scala
+data.head(1)
+```
+```sh
+scala> data.head(1)
+res2: Array[org.apache.spark.sql.Row] = Array([mstephenson@fernandez.com,Violet,34.49726772511229,12.65565114916675,39.57766801952616,4.0826206329529615,587.9510539684005])
+```
+### Transforme el data frame para que tome la forma de ("label","features")
+### Importe VectorAssembler y Vectors
+```scala
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.linalg.Vectors
+```
+```sh
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.linalg.Vectors
+```
+
+### Renombre la columna Yearly Amount Spent como "label", Tambien de los datos tome solo la columa numerica, Deje todo esto como un nuevo DataFrame que se llame df
+```scala
+data.columns
+val df = data.select(data("Yearly Amount Spent").as("label"), $"Avg Session Length", $"Time on App", $"Time on Website", $"Length of Membership")
+```
+```sh
+val res3: Array[String] = Array(Email, Avatar, Avg Session Length, Time on App, Time on Website, Length of Membership, Yearly Amount Spent)
+val df: org.apache.spark.sql.DataFrame = [label: double, Avg Session Length: double ... 3 more fields]
+```
+
+### Utilice el objeto VectorAssembler para convertir la columnas de entradas del df, a una sola columna de salida de un arreglo llamado  "features", Configure las columnas de entrada de donde se supone que leemos los valores, Llamar a esto nuevo assambler.
+```scala
+val assembler = new VectorAssembler().setInputCols(Array("Avg Session Length", "Time on App", "Time on Website", "Length of Membership")).setOutputCol("features")
+```
+```sh
+val assembler: org.apache.spark.ml.feature.VectorAssembler = VectorAssembler: uid=vecAssembler_115df6a50100, handleInvalid=error, numInputCols=4
+```
+
+### Utilice el assembler para transform nuestro DataFrame a dos columnas: label and features
+```scala
+val output = assembler.transform(df).select($"label", $"features")
+```
+```sh
+val output: org.apache.spark.sql.DataFrame = [label: double, features: vector]
+```
+
+### Crear un objeto para modelo de regresion linea.
+```scala
+var lr = new LinearRegression()
+```
+```sh
+scala> var lr = new LinearRegression()
+lr: org.apache.spark.ml.regression.LinearRegression = linReg_06172a1924ab
+```
+
+###  Ajuste el modelo para los datos y llame a este modelo lrModelo
+```scala
+var lrModelo = lr.fit(output)
+```
+```sh
+scala> var lrModelo = lr.fit(output)
+23/11/20 15:17:06 WARN Instrumentation: [959d57c4] regParam is zero, which might cause numerical instability and overfitting.
+lrModelo: org.apache.spark.ml.regression.LinearRegressionModel = LinearRegressionModel: uid=linReg_06172a1924ab, numFeatures=4
+```
+
+### Imprima the  coefficients y intercept para la regresion lineal
+```scala
+lrModelo.coefficients
+lrModelo.intercept
+```
+```sh
+scala> lrModelo.coefficients
+res19: org.apache.spark.ml.linalg.Vector = [25.734271084670716,38.709153810828816,0.43673883558514964,61.57732375487594]
+
+scala> lrModelo.intercept
+res20: Double = -1051.5942552990748
+```
+
+### Resuma el modelo sobre el conjunto de entrenamiento imprima la salida de algunas metricas!,Utilize metodo .summary de nuestro  modelo para crear un objeto llamado trainingSummary Muestre los valores de residuals, el RMSE, el MSE, y tambien el R^2 .
+```scala
+val trainingSummary = lrModelo.summary
+
+trainingSummary.residuals.show()
+trainingSummary.rootMeanSquaredError
+trainingSummary.meanSquaredError
+trainingSummary.r2
+```
+```sh
+scala> val trainingSummary = lrModelo.summary
+trainingSummary: org.apache.spark.ml.regression.LinearRegressionTrainingSummary = org.apache.spark.ml.regression.LinearRegressionTrainingSummary@626519ef
+
+scala>
+
+scala> trainingSummary.residuals.show()
++-------------------+
+|          residuals|
++-------------------+
+| -6.788234090018818|
+| 11.841128565326073|
+| -17.65262700858966|
+| 11.454889631178617|
+| 7.7833824373080915|
+|-1.8347332184773677|
+|  4.620232401352382|
+| -8.526545950978175|
+| 11.012210896516763|
+|-13.828032682158891|
+| -16.04456458615175|
+|  8.786634365463442|
+| 10.425717191807507|
+| 12.161293785003522|
+|  9.989313714461446|
+| 10.626662732649379|
+|  20.15641408428496|
+|-3.7708446586326545|
+| -4.129505481591934|
+|  9.206694655890487|
++-------------------+
+only showing top 20 rows
+
+
+scala> trainingSummary.rootMeanSquaredError
+res30: Double = 9.923256785022229
+
+scala> trainingSummary.meanSquaredError
+res31: Double = 98.47102522148971
+
+scala> trainingSummary.r2
+res32: Double = 0.9843155370226727
+```
+# Unit2 Practice 2 LINEAR LogisticRegression EXERCISE
+### Import LogisticRegression, SparkSession and Logger libraries, Create a Spark Session, load dataset "advertising.csv" into data & print Schema
+```scala
+import org.apache.spark.ml.classification.LogisticRegression
+import org.apache.spark.sql.SparkSession
+
+import org.apache.log4j._
+Logger.getLogger("org").setLevel(Level.ERROR)
+
+val spark = SparkSession.builder().getOrCreate()
+
+val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("advertising.csv")
+
+data.printSchema()
+```
+```sh
+import org.apache.log4j._
+val spark: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@16a58368
+val data: org.apache.spark.sql.DataFrame = [Daily Time Spent on Site: double, Age: int ... 8 more fields]
+root
+ |-- Daily Time Spent on Site: double (nullable = true)
+ |-- Age: integer (nullable = true)
+ |-- Area Income: double (nullable = true)
+ |-- Daily Internet Usage: double (nullable = true)
+ |-- Ad Topic Line: string (nullable = true)
+ |-- City: string (nullable = true)
+ |-- Male: integer (nullable = true)
+ |-- Country: string (nullable = true)
+ |-- Timestamp: timestamp (nullable = true)
+ |-- Clicked on Ad: integer (nullable = true)
+```
+
+### Despliega datos e imprime un renglon como ejemplo
+```scala
+data.head(1)
+
+val colnames = data.columns
+val firstrow = data.head(1)(0)
+println("\n")
+println("Example data row")
+for(ind <- Range(1, colnames.length)){
+    println(colnames(ind))
+    println(firstrow(ind))
+    println("\n")
+}
+
+```
+```sh
+scala> data.head(1)
+res6: Array[org.apache.spark.sql.Row] = Array([68.95,35,61833.9,256.09,Cloned 5thgeneration orchestration,Wrightburgh,0,Tunisia,2016-03-27 00:53:11.0,0])
+
+scala>
+
+scala> val colnames = data.columns
+colnames: Array[String] = Array(Daily Time Spent on Site, Age, Area Income, Daily Internet Usage, Ad Topic Line, City, Male, Country, Timestamp, Clicked on Ad)
+
+scala> val firstrow = data.head(1)(0)
+firstrow: org.apache.spark.sql.Row = [68.95,35,61833.9,256.09,Cloned 5thgeneration orchestration,Wrightburgh,0,Tunisia,2016-03-27 00:53:11.0,0]
+
+scala> println("\n")
+
+
+
+scala> println("Example data row")
+Example data row
+
+scala> for(ind <- Range(1, colnames.length)){
+     |     println(colnames(ind))
+     |     println(firstrow(ind))
+     |     println("\n")
+     | }
+Age
+35
+
+
+Area Income
+61833.9
+
+
+Daily Internet Usage
+256.09
+
+
+Ad Topic Line
+Cloned 5thgeneration orchestration
+
+
+City
+Wrightburgh
+
+
+Male
+0
+
+
+Country
+Tunisia
+
+
+Timestamp
+2016-03-27 00:53:11.0
+
+
+Clicked on Ad
+0
+```
+
+### Se crea nueva columna llamada "Hour" de la hora de la columna "Timestamp"
+### Se crea un nuevo Dataframe llamado "logregdata", con "Clicked on Ad" como "label" y las siguientes columnas para "features": "Daily Time Spent on Site","Age","Area Income","Daily Internet Usage","Timestamp","Male"
+```scala
+val timedata = data.withColumn("Hour",hour(data("Timestamp")))
+
+val logregdata = timedata.select(data("Clicked on Ad").as("label"), $"Daily Time Spent on Site", $"Age", $"Area Income", $"Daily Internet Usage", $"Hour", $"Male")
+```
+```sh
+scala> val timedata = data.withColumn("Hour",hour(data("Timestamp")))
+timedata: org.apache.spark.sql.DataFrame = [Daily Time Spent on Site: double, Age: int ... 9 more fields]
+
+scala> val logregdata = timedata.select(data("Clicked on Ad").as("label"), $"Daily Time Spent on Site", $"Age", $"Area Income", $"Daily Internet Usage", $"Hour", $"Male")
+logregdata: org.apache.spark.sql.DataFrame = [label: int, Daily Time Spent on Site: double ... 5 more fields]
+```
+### Cree un nuevo objeto VectorAssembler llamado "assembler" para los features
+```scala
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.linalg.Vectors
+
+val assembler = (new VectorAssembler()
+                  .setInputCols(Array("Daily Time Spent on Site", "Age","Area Income","Daily Internet Usage","Hour","Male"))
+                  .setOutputCol("features"))
+```
+```sh
+scala> import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.feature.VectorAssembler
+
+
+scala> import org.apache.spark.ml.linalg.Vectors
+import org.apache.spark.ml.linalg.Vectors
+
+scala> val assembler = (new VectorAssembler()
+     |                   .setInputCols(Array("Daily Time Spent on Site", "Age","Area Income","Daily Internet Usage","Hour","Male"))
+     |                   .setOutputCol("features"))
+assembler: org.apache.spark.ml.feature.VectorAssembler = VectorAssembler: uid=vecAssembler_a24189aef859, handleInvalid=error, numInputCols=6
+
+```
+
+### Se crean arreglos "training & test" usando radomSplit con los 70 y 30 por ciento respectivamente
+```scala
+val Array(training, test) = logregdata.randomSplit(Array(0.7, 0.3), seed = 12345)
+```
+```sh
+scala> val Array(training, test) = logregdata.randomSplit(Array(0.7, 0.3), seed = 12345)
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: int, Daily Time Spent on Site: double ... 5 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: int, Daily Time Spent on Site: double ... 5 more fields]
+
+```
+
+### Se importa el libreria para crear el objeto "pipeline", se crea el modelo de logisticRegression "lr"
+### Se entrena "pipeline" con "training" y se almacenan los resultados en "model"; se comprueba modelo "model" con test.
+```scala
+import org.apache.spark.ml.Pipeline
+
+val lr = new LogisticRegression()
+
+val pipeline = new Pipeline().setStages(Array(assembler, lr))
+
+val model = pipeline.fit(training)
+
+val results = model.transform(test)
+
+```
+```sh
+import org.apache.spark.ml.Pipeline
+
+val lr: org.apache.spark.ml.classification.LogisticRegression = logreg_51f26008df0a
+
+val pipeline: org.apache.spark.ml.Pipeline = pipeline_974abdabbda7
+
+val model: org.apache.spark.ml.PipelineModel = pipeline_974abdabbda7
+
+val results: org.apache.spark.sql.DataFrame = [label: int, Daily Time Spent on Site: double ... 9 more fields]
+```
+
+### Se importa el libreria para "MulticlassMetrics", se crea un dataframe "predictionAndLabels" con las columnas "prediccion" y "label" de "results" y las convertimos en RDD; calculamos las MulticlassMetric de "predictionAndLabels" y los almacenamos en metrics
+### imprimimos el encabezado "Confusion matrix:" e imprmimimos "metrics.confusionMatrix"; por ultimo imprimimos "metrics.accuracy".
+```scala
+import org.apache.spark.mllib.evaluation.MulticlassMetrics
+
+val predictionAndLabels = results.select($"prediction",$"label").as[(Double, Double)].rdd
+val metrics = new MulticlassMetrics(predictionAndLabels)
+
+println("Confusion matrix:")
+println(metrics.confusionMatrix)
+
+metrics.accuracy
+```
+```sh
+import org.apache.spark.ml.Pipeline
+
+```
+
+# Unit2 Practice 3 Decision tree classifier EXERCISE
+### Import libraries
+```scala
+import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.classification.DecisionTreeClassificationModel
+import org.apache.spark.ml.classification.DecisionTreeClassifier
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer}
+import org.apache.spark.ml.feature.{StringIndexer, VectorAssembler}
+```
+```sh
+scala> import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.Pipeline
+
+scala> import org.apache.spark.ml.classification.DecisionTreeClassificationModel
+import org.apache.spark.ml.classification.DecisionTreeClassificationModel
+
+scala> import org.apache.spark.ml.classification.DecisionTreeClassifier
+import org.apache.spark.ml.classification.DecisionTreeClassifier
+
+scala> import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+
+scala> import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer}
+import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer}
+
+scala> import org.apache.spark.ml.feature.{StringIndexer, VectorAssembler}
+import org.apache.spark.ml.feature.{StringIndexer, VectorAssembler}
+```
+### Load the data stored in LIBSVM format as a DataFrame.
+```scala
+val data = spark.read.format("libsvm").load("sample_libsvm_data.txt")
+```
+```sh
+scala> val data = spark.read.format("libsvm").load("sample_libsvm_data.txt")
+23/11/24 19:58:20 WARN LibSVMFileFormat: 'numFeatures' option not specified, determining the number of features by going though the input. If you know the number in advance, please specify it via 'numFeatures' option to avoid the extra scan.
+data: org.apache.spark.sql.DataFrame = [label: double, features: vector]
+```
+### Index labels, adding metadata to the label column. Fit on whole dataset to include all labels in index.
+```scala
+val labelIndexer = new StringIndexer().setInputCol("label").setOutputCol("indexedLabel").fit(data)
+```
+```sh
+scala> val labelIndexer = new StringIndexer().setInputCol("label").setOutputCol("indexedLabel").fit(data)
+labelIndexer: org.apache.spark.ml.feature.StringIndexerModel = StringIndexerModel: uid=strIdx_64c1c5523909, handleInvalid=error
+```
+### Automatically identify categorical features, and index them. Features with > 4 distinct values are treated as continuous.
+```scala
+val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(4).fit(data)
+```
+```sh
+scala> val featureIndexer = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(4).fit(data)
+featureIndexer: org.apache.spark.ml.feature.VectorIndexerModel = VectorIndexerModel: uid=vecIdx_be03681c57d9, numFeatures=692, handleInvalid=error
+```
+### Split the data into training and test sets (30% held out for testing).
+```scala
+val Array(trainingData, testData) = data.randomSplit(Array(0.7, 0.3))
+```
+```sh
+scala> val Array(trainingData, testData) = data.randomSplit(Array(0.7, 0.3))
+trainingData: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
+testData: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
+```
+### Train Decision tree model
+```scala
+val dt = new DecisionTreeClassifier().setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures")
+```
+```sh
+scala> val dt = new DecisionTreeClassifier().setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures")
+dt: org.apache.spark.ml.classification.DecisionTreeClassifier = dtc_443edf070bad
+```
+
+### Convert indexed labels back to original labels.
+```scala
+val dt = new DecisionTreeClassifier().setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures")
+```
+```sh
+scala> val labelConverter = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(labelIndexer.labelsArray(0))
+labelConverter: org.apache.spark.ml.feature.IndexToString = idxToStr_e24177588885
+```
+### Chain indexers and tree in a Pipeline.
+```scala
+val pipeline = new Pipeline().setStages(Array(labelIndexer, featureIndexer, dt, labelConverter))
+```
+```sh
+scala> val pipeline = new Pipeline().setStages(Array(labelIndexer, featureIndexer, dt, labelConverter))
+pipeline: org.apache.spark.ml.Pipeline = pipeline_3254113dd363
+```
+### Train model. This also runs the indexers.
+```scala
+val model = pipeline.fit(trainingData)
+```
+```sh
+scala> val model = pipeline.fit(trainingData)
+model: org.apache.spark.ml.PipelineModel = pipeline_3254113dd363
+```
+### Make Predictions
+```scala
+val predictions = model.transform(testData)
+```
+```sh
+scala> val predictions = model.transform(testData)
+predictions: org.apache.spark.sql.DataFrame = [label: double, features: vector ... 6 more fields]
+```
+### Select example rows to display.
+```scala
+predictions.select("predictedLabel", "label", "features").show(5)
+```
+```sh
+scala> predictions.select("predictedLabel", "label", "features").show(5)
++--------------+-----+--------------------+
+|predictedLabel|label|            features|
++--------------+-----+--------------------+
+|           0.0|  0.0|(692,[122,123,148...|
+|           0.0|  0.0|(692,[123,124,125...|
+|           0.0|  0.0|(692,[124,125,126...|
+|           0.0|  0.0|(692,[125,126,127...|
+|           0.0|  0.0|(692,[126,127,128...|
++--------------+-----+--------------------+
+only showing top 5 rows
+```
+### Select (prediction, true label) and compute test error.
+```scala
+val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("accuracy")
+val accuracy = evaluator.evaluate(predictions)
+println(s"Test Error = ${(1.0 - accuracy)}")
+
+val treeModel = model.stages(2).asInstanceOf[DecisionTreeClassificationModel]
+println(s"Learned classification tree model:\n ${treeModel.toDebugString}")
+```
+```sh
+scala> val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("accuracy")
+evaluator: org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator = MulticlassClassificationEvaluator: uid=mcEval_53ab2ac9bd96, metricName=accuracy, metricLabel=0.0, beta=1.0, eps=1.0E-15
+
+scala> val accuracy = evaluator.evaluate(predictions)
+accuracy: Double = 1.0
+
+scala> println(s"Test Error = ${(1.0 - accuracy)}")
+Test Error = 0.0
+
+scala>
+
+scala> val treeModel = model.stages(2).asInstanceOf[DecisionTreeClassificationModel]
+treeModel: org.apache.spark.ml.classification.DecisionTreeClassificationModel = DecisionTreeClassificationModel: uid=dtc_443edf070bad, depth=2, numNodes=5, numClasses=2, numFeatures=692
+
+scala> println(s"Learned classification tree model:\n ${treeModel.toDebugString}")
+Learned classification tree model:
+ DecisionTreeClassificationModel: uid=dtc_443edf070bad, depth=2, numNodes=5, numClasses=2, numFeatures=692
+  If (feature 434 <= 70.5)
+   If (feature 99 in {2.0})
+    Predict: 0.0
+   Else (feature 99 not in {2.0})
+    Predict: 1.0
+  Else (feature 434 > 70.5)
+   Predict: 0.0
+```
+
+# Unit2 Practice 4 Multilayer Perceptron Classifier EXERCISE
+### Import MultilayerPerceptronClassifier & MulticlassClassificationEvaluator
+```scala
+import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+```
+```sh
+import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+```
+
+### Load dataset "sample_multiclass_classification_data.txt" on dataframe "data"
+```scala
+val data = spark.read.format("libsvm").load("sample_multiclass_classification_data.txt")
+```
+```sh
+val data: org.apache.spark.sql.DataFrame = [label: double, features: vector]
+```
+
+### Split "data" in to "split" and set to dataframes: "train" with 60% of data and "test" with 40% of data.
+```scala
+val splits = data.randomSplit(Array(0.6, 0.4), seed = 1234L)
+val train = splits(0)
+val test = splits(1)
+```
+```sh
+val splits: Array[org.apache.spark.sql.Dataset[org.apache.spark.sql.Row]] = Array([label: double, features: vector], [label: double, features: vector])
+val train: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
+val test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
+```
+
+### create "layers" array with values 4,5,4,3"; create Multilayer Perceptron Classifier "trainer"; fit "trainer" with "train in to model" 
+```scala
+val layers = Array[Int](4, 5, 4, 3)
+val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setBlockSize(128).setSeed(1234L).setMaxIter(100)
+val model = trainer.fit(train)
+```
+```sh
+val layers: Array[Int] = Array(4, 5, 4, 3)
+val trainer: org.apache.spark.ml.classification.MultilayerPerceptronClassifier = mlpc_699e01a3d082
+val model: org.apache.spark.ml.classification.MultilayerPerceptronClassificationModel = MultilayerPerceptronClassificationModel: uid=mlpc_699e01a3d082, numLayers=4, numClasses=3, numFeatures=4
+```
+
+### "result" validate "model" with "test"; create dataframe prediccionAndLabels with columns "prediction" and label from result; create a "evaluator Multiclass Classification Evaluator "accuracy" and print the "accuracy" from "predictionAndLabels".
+```scala
+val result = model.transform(test)
+val predictionAndLabels = result.select("prediction", "label")
+val evaluator = new MulticlassClassificationEvaluator().setMetricName("accuracy")
+
+println(s"Test set accuracy = ${evaluator.evaluate(predictionAndLabels)}")
+```
+```sh
+val result: org.apache.spark.sql.DataFrame = [label: double, features: vector ... 3 more fields]
+val predictionAndLabels: org.apache.spark.sql.DataFrame = [prediction: double, label: double]
+val predictionAndLabels: org.apache.spark.sql.DataFrame = [prediction: double, label: double]
+
+Test set accuracy = 0.9523809523809523
+```
+
+# Evaluation Unit 2
+### Instrucciones Desarrollar las siguientes instrucciones en Spark con el lenguaje de  programación Scala, utilizando solo la documentación de la librería de  Machine Learning Mllib de Spark y Google. 
+### Cargar en un dataframe de la fuente de datos Iris.csv que se encuentra en  https://github.com/jcromerohdz/iris, elaborar la limpieza de datos necesaria para  ser procesado por el siguiente algoritmo (Importante, esta limpieza debe ser por  medio de un script de Scala en Spark). 
+
+### Utilice la librería Mllib de Spark el algoritmo de Machine Learning  Multilayer Perceptron Classifier
+```scala
+import org.apache.spark.ml.classification.MultilayerPerceptronClassifier 
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator 
+import org.apache.spark.ml.feature.IndexToString 
+import org.apache.spark.ml.feature.StringIndexer 
+import org.apache.spark.ml.feature.VectorIndexer 
+import org.apache.spark.ml.feature.VectorAssembler 
+import org.apache.spark.ml.Pipeline
+import org.apache.spark.sql.SparkSession
+
+import org.apache.log4j._
+Logger.getLogger("org").setLevel(Level.ERROR)
+val spark = SparkSession.builder().getOrCreate()
+val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("iris.csv")
+```
+```sh
+scala> import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
+import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
+
+scala> import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+
+scala> import org.apache.spark.ml.feature.IndexToString
+import org.apache.spark.ml.feature.IndexToString
+
+scala> import org.apache.spark.ml.feature.StringIndexer
+import org.apache.spark.ml.feature.StringIndexer
+
+scala> import org.apache.spark.ml.feature.VectorIndexer
+import org.apache.spark.ml.feature.VectorIndexer
+
+scala> import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.feature.VectorAssembler
+
+scala> import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.Pipeline
+
+scala> import org.apache.log4j._Logger.getLogger("org").setLevel(Level.ERROR)
+<console>:1: error: ';' expected but '(' found.
+       import org.apache.log4j._Logger.getLogger("org").setLevel(Level.ERROR)
+                                                ^
+
+scala> import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.SparkSession
+
+scala> import org.apache.log4j._Logger.getLogger("org").setLevel(Level.ERROR)
+<console>:1: error: ';' expected but '(' found.
+       import org.apache.log4j._Logger.getLogger("org").setLevel(Level.ERROR)
+                                                ^
+
+scala> import org.apache.log4j._
+import org.apache.log4j._
+
+scala> Logger.getLogger("org").setLevel(Level.ERROR)
+
+scala> val spark = SparkSession.builder().getOrCreate()
+spark: org.apache.spark.sql.SparkSession = org.apache.spark.sql.SparkSession@2bdf341a
+
+scala> val data  = spark.read.option("header","true").option("inferSchema", "true").format("csv").load("iris.csv")
+data: org.apache.spark.sql.DataFrame = [sepal_length: double, sepal_width: double ... 3 more fields]
+```
+
+###  2 ¿Cuáles son los nombres de las columnas? 
+```scala
+data.columns
+```
+```sh
+scala> data.columns
+res1: Array[String] = Array(sepal_length, sepal_width, petal_length, petal_width, species)
+```
+### 3. ¿Cómo es el esquema? 
+
+```scala
+data.printSchema()
+```
+```sh
+scala> data.printSchema()
+root
+ |-- sepal_length: double (nullable = true)
+ |-- sepal_width: double (nullable = true)
+ |-- petal_length: double (nullable = true)
+ |-- petal_width: double (nullable = true)
+ |-- species: string (nullable = true)
+```
+
+### 4. Imprime las primeras 5 columnas. 
+```scala
+data.head(5)
+```
+```sh
+scala> data.head(5)
+res4: Array[org.apache.spark.sql.Row] = Array([5.1,3.5,1.4,0.2,setosa], [4.9,3.0,1.4,0.2,setosa], [4.7,3.2,1.3,0.2,setosa], [4.6,3.1,1.5,0.2,setosa], [5.0,3.6,1.4,0.2,setosa])
+```
+
+### 5. Usa el método describe () para aprender más sobre los datos del DataFrame. 
+```scala
+data.describe().show()
+```
+```sh
+scala> data.describe().show()
+23/11/24 20:56:38 WARN package: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
++-------+------------------+-------------------+------------------+------------------+---------+
+|summary|      sepal_length|        sepal_width|      petal_length|       petal_width|  species|
++-------+------------------+-------------------+------------------+------------------+---------+
+|  count|               150|                150|               150|               150|      150|
+|   mean| 5.843333333333335| 3.0540000000000007|3.7586666666666693|1.1986666666666672|     null|
+| stddev|0.8280661279778637|0.43359431136217375| 1.764420419952262|0.7631607417008414|     null|
+|    min|               4.3|                2.0|               1.0|               0.1|   setosa|
+|    max|               7.9|                4.4|               6.9|               2.5|virginica|
++-------+------------------+-------------------+------------------+------------------+---------+
+```
+### 6. Haga la transformación pertinente para los datos categóricos los cuales serán  nuestras etiquetas a clasificar.
+```scala
+val assembler = new VectorAssembler().setInputCols(Array("sepal_length", "sepal_width", "petal_length", "petal_width")).setOutputCol("features")
+
+val features = assembler.transform(data)
+
+val indexerLabel = new StringIndexer().setInputCol("species").setOutputCol("indexedLabel").fit(features)
+
+val indexerFeatures = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(4)
+
+```
+```sh
+scala> val assembler = new VectorAssembler().setInputCols(Array("sepal_length", "sepal_width", "petal_length", "petal_width")).setOutputCol("features")
+assembler: org.apache.spark.ml.feature.VectorAssembler = VectorAssembler: uid=vecAssembler_fb6ad8221ba9, handleInvalid=error, numInputCols=4
+
+scala> val features = assembler.transform(data)
+features: org.apache.spark.sql.DataFrame = [sepal_length: double, sepal_width: double ... 4 more fields]
+
+scala> val indexerLabel = new StringIndexer().setInputCol("species").setOutputCol("indexedLabel").fit(features)
+indexerLabel: org.apache.spark.ml.feature.StringIndexerModel = StringIndexerModel: uid=strIdx_a32a4d308ba6, handleInvalid=error
+
+scala> val indexerFeatures = new VectorIndexer().setInputCol("features").setOutputCol("indexedFeatures").setMaxCategories(4)
+indexerFeatures: org.apache.spark.ml.feature.VectorIndexer = vecIdx_2539c0f63f1f
+
+```
+
+### 7. Construya el modelo de clasificación y explique su arquitectura. 
+```scala
+val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 12345)
+
+val layers = Array[Int](4,6,2,3)
+
+val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures").setBlockSize(128).setSeed(1234).setMaxIter(100)
+
+val converterLabel = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(indexerLabel.labels)
+
+val pipeline = new Pipeline().setStages(Array(indexerLabel, indexerFeatures, trainer, converterLabel))
+
+val model = pipeline.fit(training)
+
+val results = model.transform(test)
+```
+
+```sh
+scala> val Array(training, test) = features.randomSplit(Array(0.7, 0.3), seed = 12345)
+training: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [sepal_length: double, sepal_width: double ... 4 more fields]
+test: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [sepal_length: double, sepal_width: double ... 4 more fields]
+
+scala> val layers = Array[Int](4,6,2,3)
+layers: Array[Int] = Array(4, 6, 2, 3)
+
+scala> val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setLabelCol("indexedLabel").setFeaturesCol("indexedFeatures").setBlockSize(128).setSeed(1234).setMaxIter(100)
+trainer: org.apache.spark.ml.classification.MultilayerPerceptronClassifier = mlpc_bde5f10da614
+
+scala> val converterLabel = new IndexToString().setInputCol("prediction").setOutputCol("predictedLabel").setLabels(indexerLabel.labels)
+warning: one deprecation (since 3.0.0); for details, enable `:setting -deprecation' or `:replay -deprecation'
+converterLabel: org.apache.spark.ml.feature.IndexToString = idxToStr_aa84e603412d
+
+scala> val pipeline = new Pipeline().setStages(Array(indexerLabel, indexerFeatures, trainer, converterLabel))
+pipeline: org.apache.spark.ml.Pipeline = pipeline_3e1e175db02c
+
+scala> val model = pipeline.fit(training)
+model: org.apache.spark.ml.PipelineModel = pipeline_3e1e175db02c
+
+scala> val results = model.transform(test)
+results: org.apache.spark.sql.DataFrame = [sepal_length: double, sepal_width: double ... 10 more fields]
+```
+
+### 8. Imprima los resultados del modelo y de sus observaciones.
+```scala
+results.show() 
+
+val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("accuracy")
+
+val accuracy = evaluator.evaluate(results)
+
+println(s"Accuracy = ${accuracy}")
+```
+```sh
+scala> results.show()
++------------+-----------+------------+-----------+----------+-----------------+------------+-----------------+--------------------+--------------------+----------+--------------+
+|sepal_length|sepal_width|petal_length|petal_width|   species|         features|indexedLabel|  indexedFeatures|       rawPrediction|         probability|prediction|predictedLabel|
++------------+-----------+------------+-----------+----------+-----------------+------------+-----------------+--------------------+--------------------+----------+--------------+
+|         4.6|        3.2|         1.4|        0.2|    setosa|[4.6,3.2,1.4,0.2]|         0.0|[4.6,3.2,1.4,0.2]|[40.4665490805148...|[0.99999999997457...|       0.0|        setosa|
+|         4.8|        3.1|         1.6|        0.2|    setosa|[4.8,3.1,1.6,0.2]|         0.0|[4.8,3.1,1.6,0.2]|[40.4665490805122...|[0.99999999997457...|       0.0|        setosa|
+|         4.9|        2.5|         4.5|        1.7| virginica|[4.9,2.5,4.5,1.7]|         2.0|[4.9,2.5,4.5,1.7]|[-65.747245467876...|[3.88934941250273...|       2.0|     virginica|
+|         5.0|        3.0|         1.6|        0.2|    setosa|[5.0,3.0,1.6,0.2]|         0.0|[5.0,3.0,1.6,0.2]|[40.4665490805114...|[0.99999999997457...|       0.0|        setosa|
+|         5.0|        3.2|         1.2|        0.2|    setosa|[5.0,3.2,1.2,0.2]|         0.0|[5.0,3.2,1.2,0.2]|[40.4665490805153...|[0.99999999997457...|       0.0|        setosa|
+|         5.0|        3.5|         1.3|        0.3|    setosa|[5.0,3.5,1.3,0.3]|         0.0|[5.0,3.5,1.3,0.3]|[40.4665490805142...|[0.99999999997457...|       0.0|        setosa|
+|         5.1|        3.5|         1.4|        0.3|    setosa|[5.1,3.5,1.4,0.3]|         0.0|[5.1,3.5,1.4,0.3]|[40.4665490805109...|[0.99999999997457...|       0.0|        setosa|
+|         5.4|        3.4|         1.5|        0.4|    setosa|[5.4,3.4,1.5,0.4]|         0.0|[5.4,3.4,1.5,0.4]|[40.4665490805103...|[0.99999999997457...|       0.0|        setosa|
+|         5.4|        3.9|         1.3|        0.4|    setosa|[5.4,3.9,1.3,0.4]|         0.0|[5.4,3.9,1.3,0.4]|[40.4665490805170...|[0.99999999997457...|       0.0|        setosa|
+|         5.7|        2.8|         4.1|        1.3|versicolor|[5.7,2.8,4.1,1.3]|         1.0|[5.7,2.8,4.1,1.3]|[-82.448811098194...|[1.78155190528394...|       1.0|    versicolor|
+|         5.7|        4.4|         1.5|        0.4|    setosa|[5.7,4.4,1.5,0.4]|         0.0|[5.7,4.4,1.5,0.4]|[40.4665490805119...|[0.99999999997457...|       0.0|        setosa|
+|         5.8|        4.0|         1.2|        0.2|    setosa|[5.8,4.0,1.2,0.2]|         0.0|[5.8,4.0,1.2,0.2]|[40.4665490805698...|[0.99999999997457...|       0.0|        setosa|
+|         6.0|        2.9|         4.5|        1.5|versicolor|[6.0,2.9,4.5,1.5]|         1.0|[6.0,2.9,4.5,1.5]|[-82.448811097846...|[1.78155190696633...|       1.0|    versicolor|
+|         6.1|        2.6|         5.6|        1.4| virginica|[6.1,2.6,5.6,1.4]|         2.0|[6.1,2.6,5.6,1.4]|[-65.747245467876...|[3.88934941250273...|       2.0|     virginica|
+|         6.1|        2.9|         4.7|        1.4|versicolor|[6.1,2.9,4.7,1.4]|         1.0|[6.1,2.9,4.7,1.4]|[-82.448811091883...|[1.78155193584155...|       1.0|    versicolor|
+|         6.2|        2.2|         4.5|        1.5|versicolor|[6.2,2.2,4.5,1.5]|         1.0|[6.2,2.2,4.5,1.5]|[-65.747245467876...|[3.88934941250273...|       2.0|     virginica|
+|         6.2|        2.9|         4.3|        1.3|versicolor|[6.2,2.9,4.3,1.3]|         1.0|[6.2,2.9,4.3,1.3]|[-82.448811098194...|[1.78155190528394...|       1.0|    versicolor|
+|         6.2|        3.4|         5.4|        2.3| virginica|[6.2,3.4,5.4,2.3]|         2.0|[6.2,3.4,5.4,2.3]|[-65.747245467876...|[3.88934941250273...|       2.0|     virginica|
+|         6.4|        2.8|         5.6|        2.2| virginica|[6.4,2.8,5.6,2.2]|         2.0|[6.4,2.8,5.6,2.2]|[-65.747245467876...|[3.88934941250273...|       2.0|     virginica|
+|         6.4|        3.1|         5.5|        1.8| virginica|[6.4,3.1,5.5,1.8]|         2.0|[6.4,3.1,5.5,1.8]|[-65.747245467876...|[3.88934941250273...|       2.0|     virginica|
++------------+-----------+------------+-----------+----------+-----------------+------------+-----------------+--------------------+--------------------+----------+--------------+
+only showing top 20 rows
+
+scala> val evaluator = new MulticlassClassificationEvaluator().setLabelCol("indexedLabel").setPredictionCol("prediction").setMetricName("accuracy")
+evaluator: org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator = MulticlassClassificationEvaluator: uid=mcEval_bde573a86614, metricName=accuracy, metricLabel=0.0, beta=1.0, eps=1.0E-15
+
+scala> val accuracy = evaluator.evaluate(results)
+accuracy: Double = 0.9705882352941176
+
+scala>  println(s"Accuracy = ${accuracy}")
+Accuracy = 0.9705882352941176
+```
 
